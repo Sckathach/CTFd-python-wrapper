@@ -1,25 +1,4 @@
-# CTFd Blabla - Blabla
-
-## Préparation de l'étude
-
-### **éléments à surveiller** :
-
-*Entre 2 utilisateurs*
-- Adresses IP en commun
-- Timing des flags
-- Distance de Jaccard
-- Comparaison des solves
-- comparaison des scores
-
-*Pour un utilisateur*
-- Comparer à la moyenne des utilisateurs, à l'écart type : vitesse de progression
-- Temps entre le téléchargement d'un fichier et le flag
-- Temps entre deux flag : pas possible de flag 1/2/3 en 2 secondes
-- verification lors de connection en netcat,...
-- connexion en netcat authentifiée
-- writeups des challs difficiles
-
-Prevention/detection/dissuasion
+# Python Wrapper for CTFd's API
 
 ## Installation
 Mise en place de l'environnement de travail :
