@@ -157,7 +157,7 @@ class Challenge:
             type=flag_type,
             data=data,
         )
-        return flag.push()
+        return flag.push(url=URL, token=TOKEN)
 
     def attempt(self, flag):
         if self.state == "hidden":
