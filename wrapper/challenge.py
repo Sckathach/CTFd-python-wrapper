@@ -54,7 +54,7 @@ class Challenge:
         tags=template["tags"],
         max_attempts=template["max_attempts"],
         solved_by_me=template["solved_by_me"],
-        flags=template["flags"],
+        flags=template["flags"]
     ):
         self.id = id
         self.name = name
@@ -124,29 +124,19 @@ class Challenge:
             "id": data["id"],
             "type": data["type"],
             "name": data["name"],
-            "value": data["value"] if "value" in data.keys() else template["value"],
+            "value": data.get("value", template["value"]),
             "solves": data["solves"],
             "category": data["category"],
-            "description": data["description"]
-            if "description" in data.keys()
-            else template["description"],
+            "description": data.get("description", template["description"]),
             "initial": data["initial"],
             "decay": data["decay"],
             "minimum": data["minimum"],
-            "connection_info": data["connection_info"]
-            if "connection_info" in data.keys()
-            else template["connection_info"],
-            "tags": data["tags"] if "tags" in data.keys() else template["tags"],
+            "connection_info": data.get("connection_info", template["connection_info"]),
+            "tags": data.get("tags", template["tags"]),
             "state": data["state"],
-            "function": data["function"]
-            if "function" in data.keys()
-            else template["function"],
-            "max_attempts": data["max_attempts"]
-            if "max_attempts" in data.keys()
-            else template["max_attempts"],
-            "solved_by_me": data["solved_by_me"]
-            if "solved_by_me" in data.keys()
-            else template["solved_by_me"],
+            "function": data.get("function", template["function"]),
+            "max_attempts": data.get("max_attempts", template["max_attempts"]),
+            "solved_by_me": data.get("solved_by_me", template["solved_by_me"])
         }
 
     def add_flag(self, content, flag_type="static", data=""):
