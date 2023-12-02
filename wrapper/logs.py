@@ -1,4 +1,5 @@
-from api import SIMPLE_VERBOSE, FULL_VERBOSE
+SIMPLE_VERBOSE = True
+FULL_VERBOSE = False
 
 
 def log(log_type, message):

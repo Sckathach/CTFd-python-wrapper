@@ -1,6 +1,3 @@
-import api.get_requests
-from api.post_requests import create_user
-
 
 class User:
     def __init__(
@@ -23,7 +20,7 @@ class User:
         self.hidden = hidden
         self.banned = banned
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"User(id={self.id}, name={self.name}, email={self.email}, password={self.password}, type={self.type}, verified={self.verified}, hidden={self.hidden}, banned={self.banned})"
 
     def to_dict(self):
@@ -41,10 +38,10 @@ class User:
         password = name + "pass"
         return User(id, name, email, password)
 
-    def push(self):
-        data = self.to_dict()
-        print(f"The user {self.name}, will be pushed with information: {data}")
-        create_user(data)
+    # def push(self):
+    #     data = self.to_dict()
+    #     print(f"The user {self.name}, will be pushed with information: {data}")
+    #     create_user(data)
 
     @classmethod
     def filter_dict(cls, data):

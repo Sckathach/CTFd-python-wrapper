@@ -1,11 +1,6 @@
-from api.get_requests import get_challenge, get_challenge_flags
-from api.post_requests import create_challenge, attempt_challenge, update_challenge
-from wrapper.errors import HiddenChallengeError
-from wrapper.flag import Flag
-from api.logs import log
-
-TOKEN = None
-URL = None
+from .errors import HiddenChallengeError
+from .flag import Flag
+from .logs import log
 
 template = {
     "id": -1,
@@ -28,21 +23,14 @@ template = {
 }
 
 
-def setup(token, url):
-    global TOKEN
-    global URL
-    TOKEN = token
-    URL = url
-
-
 class Challenge:
     def __init__(
         self,
-        id=template["id"],
-        name=template["name"],
-        category=template["category"],
-        description=template["description"],
-        initial=template["initial"],
+        id: int = template["id"],
+        name: str = template["name"],
+        category: str = template["category"],
+        description: str = template["description"],
+        initial: int = template["initial"],
         value=template["value"],
         minimum=template["minimum"],
         function=template["function"],
@@ -97,24 +85,9 @@ class Challenge:
             name=name, category=category, description=description, initial=initial
         )
 
-    @classmethod
-    def get(cls, challenge_id):
-        return cls.from_dict(get_challenge(challenge_id, token=TOKEN, url=URL))
-
-    def push(self):
-        data = self.to_dict()
-        log("SIMPLE", f"The challenge {self.name} will be pushed.")
-        log("FULL", f"{data}")
-        response = create_challenge(data, token=TOKEN, url=URL)
-        self.id = response["data"]["id"]
-        return response
-
-    def update(self):
-        data = self.to_dict()
-        log("SIMPLE", f"The challenge {self.name}, will be updated.")
-        log("FULL", f"{data}")
-        response = update_challenge(data, token=TOKEN, url=URL)
-        return response
+    # @classmethod
+    # def get(cls, challenge_id):
+    #     return cls.from_dict(get_challenge(challenge_id, token=TOKEN, url=URL))
 
     @classmethod
     def filter_dict(cls, data):
@@ -139,32 +112,32 @@ class Challenge:
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"])
         }
 
-    def add_flag(self, content, flag_type="static", data=""):
-        flag = Flag(
-            challenge_id=self.id,
-            challenge=self.id,
-            content=content,
-            type=flag_type,
-            data=data,
-        )
-        return flag.push(url=URL, token=TOKEN)
-
-    def attempt(self, flag):
-        if self.state == "hidden":
-            raise HiddenChallengeError("Impossible to attempt hidden challenge.")
-        else:
-            result = attempt_challenge(self.id, flag, token=TOKEN, url=URL)["data"]["status"]
-            return result == "correct" or result == "already_solved"
-
-    def get_flags(self):
-        flags = get_challenge_flags(self.id, token=TOKEN, url=URL)
-        self.flags = []
-        for f in flags:
-            self.flags.append(Flag.from_dict(f))
-
-    def get_flag(self):
-        flags = get_challenge_flags(self.id, token=TOKEN, url=URL)
-        if len(flags) > 0:
-            return flags[0]["content"]
-        else:
-            return ""
+    # def add_flag(self, content, flag_type="static", data=""):
+    #     flag = Flag(
+    #         challenge_id=self.id,
+    #         challenge=self.id,
+    #         content=content,
+    #         type=flag_type,
+    #         data=data,
+    #     )
+    #     return flag.push(url=URL, token=TOKEN)
+    #
+    # def attempt(self, flag):
+    #     if self.state == "hidden":
+    #         raise HiddenChallengeError("Impossible to attempt hidden challenge.")
+    #     else:
+    #         result = attempt_challenge(self.id, flag, token=TOKEN, url=URL)["data"]["status"]
+    #         return result == "correct" or result == "already_solved"
+    #
+    # def get_flags(self):
+    #     flags = get_challenge_flags(self.id, token=TOKEN, url=URL)
+    #     self.flags = []
+    #     for f in flags:
+    #         self.flags.append(Flag.from_dict(f))
+    #
+    # def get_flag(self):
+    #     flags = get_challenge_flags(self.id, token=TOKEN, url=URL)
+    #     if len(flags) > 0:
+    #         return flags[0]["content"]
+    #     else:
+    #         return ""

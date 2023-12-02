@@ -1,5 +1,3 @@
-from api.post_requests import create_flag
-from api import SIMPLE_VERBOSE, FULL_VERBOSE
 
 template = {
     "challenge_id": -1,
@@ -43,15 +41,15 @@ class Flag:
     def to_dict(self):
         return self.__dict__
 
-    def push(self, url=None, token=None):
-        data = self.to_dict()
-        if SIMPLE_VERBOSE:
-            print(f"The flag {self.content} will be pushed with.")
-        if FULL_VERBOSE:
-            print(data)
-        response = create_flag(data, url=url, token=token)
-        self.id = response["data"]["id"]
-        self.challenge_id = response["data"]["challenge_id"]
+    # def push(self, url=None, token=None):
+    #     data = self.to_dict()
+    #     if SIMPLE_VERBOSE:
+    #         print(f"The flag {self.content} will be pushed with.")
+    #     if FULL_VERBOSE:
+    #         print(data)
+    #     response = create_flag(data, url=url, token=token)
+    #     self.id = response["data"]["id"]
+    #     self.challenge_id = response["data"]["challenge_id"]
 
     @classmethod
     def from_dict(cls, dict):

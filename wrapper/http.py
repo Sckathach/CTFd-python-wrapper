@@ -1,0 +1,111 @@
+from typing import (
+    Dict,
+    Optional,
+)
+import requests as rq
+from .errors import RequestError
+from .logs import log
+import json
+
+
+class HTTPClient:
+    def __init__(self):
+        self.token: Optional[str] = None
+        self.url: Optional[str] = None
+
+    def request(self, request_type, path, data=None):
+        headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
+        try:
+            if request_type == "POST":
+                r = rq.post(self.url + path, json=data, headers=headers)
+            elif request_type == "GET":
+                r = rq.get(self.url + path, headers=headers)
+            elif request_type == "PATCH":
+                r = rq.patch(self.url + path, json=data, headers=headers)
+            elif request_type == "DELETE":
+                r = rq.delete(self.url + path, headers=headers)
+            else:
+                raise RequestError(f"Unsupported request type: {request_type}")
+
+            if r.status_code != 200:
+                raise RequestError(f"{request_type} error with status: {r.status_code}, {r.json()}")
+            else:
+                log("SIMPLE", f"POST {path} SUCCESS")
+                log("FULL", f"{json.dumps(data, indent=4)}")
+            return r.json()
+        except ConnectionError as conn_err:
+            log("ANYWAY", f"ERROR: {conn_err}")
+            log("ANYWAY", "INFO: Is it connected?")
+            raise ConnectionError(f"{conn_err}")
+        except Exception as err:
+            log("ANYWAY", f"ERROR: {err}, URL: {self.url}, TOKEN: {self.token}")
+            raise Exception(err)
+
+    def get_challenges(self) -> Dict:
+        challenges = self.request("GET", "/challenges")
+        return challenges["data"]
+
+    def get_challenge(self, challenge_id=0) -> Dict:
+        challenge = self.request("GET", f"/challenges/{challenge_id}")
+        return challenge["data"]
+
+    def get_challenge_flags(self, challenge_id=0) -> Dict:
+        flags = self.request("GET", f"/challenges/{challenge_id}/flags")
+        return flags["data"]
+
+    def delete_challenge(self, challenge_id=0) -> Dict:
+        return self.request("DELETE", f"/challenges/{challenge_id}")
+
+    def create_user(self, data) -> Dict:
+        d = {
+            "name": data["name"],
+            "email": data["email"],
+            "password": data["password"],
+            "type": data["type"],
+            "verified": data["verified"],
+            "hidden": data["hidden"],
+            "banned": data["banned"],
+        }
+        return self.request("POST", "/users", data=d)
+
+    def create_challenge(self, data) -> Dict:
+        d = {
+            "name": data["name"],
+            "category": data["category"],
+            "description": data["description"],
+            "initial": data["initial"],
+            "function": data["function"],
+            "decay": data["decay"],
+            "minimum": data["minimum"],
+            "state": data["state"],
+            "type": data["type"],
+        }
+        return self.request("POST", "/challenges", data=d)
+
+    def attempt_challenge(self, challenge_id, flag) -> Dict:
+        d = {"challenge_id": challenge_id, "submission": flag}
+        return self.request("POST", "/challenges/attempt", data=d)
+
+    def update_challenge(self, data) -> Dict:
+        d = {
+            "name": data["name"],
+            "category": data["category"],
+            "description": data["description"],
+            "connection_info": data["connection_info"],
+            "initial": data["initial"],
+            "function": data["function"],
+            "decay": data["decay"],
+            "minimum": data["minimum"],
+            "max_attempts": data["max_attempts"],
+            "state": data["state"],
+        }
+        return self.request("PATCH", f'/challenges/{data["id"]}', data=d)
+
+    def create_flag(self, data) -> Dict:
+        d = {
+            "content": data["content"],
+            "data": data["data"],
+            "type": data["type"],
+            "challenge": data["challenge"],
+        }
+        return self.request("POST", "/flags", data=d)
