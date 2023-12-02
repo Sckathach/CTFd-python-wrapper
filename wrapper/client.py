@@ -1,9 +1,9 @@
 from .http import HTTPClient
 from typing import Dict, Optional
-from customTypes.challenge import Challenge as ChallengePayload
-from customTypes.user import User as UserPayload
-from customTypes.flag import Flag as FlagPayload
-from customTypes.http import HTTPClient as HTTPClientPayload
+from types_.challenge import Challenge as ChallengePayload
+from types_.user import User as UserPayload
+from types_.flag import Flag as FlagPayload
+from types_.http import HTTPClient as HTTPClientPayload
 from .challenge import Challenge
 
 
@@ -34,5 +34,6 @@ class Client:
         x = self.push_challenge(challenge)
         self.challenges[str(x.id)] = x
 
-
-
+    def list_challenges(self):
+        for x in self.challenges:
+            print(x)
