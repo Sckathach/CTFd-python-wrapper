@@ -1,10 +1,7 @@
-from typing import (
-    Dict,
-    Optional,
-)
+from typing import Optional, Dict
 import requests as rq
 from .errors import RequestError
-from .logs import log
+from .logs import Log
 import json
 
 
@@ -12,6 +9,7 @@ class HTTPClient:
     def __init__(self):
         self.token: Optional[str] = None
         self.url: Optional[str] = None
+        self.log = Log("HTTPClient")
 
     def request(self, request_type, path, data=None):
         headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
@@ -28,18 +26,17 @@ class HTTPClient:
                 raise RequestError(f"Unsupported request type: {request_type}")
 
             if r.status_code != 200:
-                raise RequestError(f"{request_type} error with status: {r.status_code}, {r.json()}")
+                raise RequestError(f"{request_type} error with status: {r.status_code}")
             else:
-                log("SIMPLE", f"POST {path} SUCCESS")
-                log("FULL", f"{json.dumps(data, indent=4)}")
+                self.log.info(f"POST {path} SUCCESS")
+                self.log.debug(f"{json.dumps(data, indent=4)}")
             return r.json()
         except ConnectionError as conn_err:
-            log("ANYWAY", f"ERROR: {conn_err}")
-            log("ANYWAY", "INFO: Is it connected?")
-            raise ConnectionError(f"{conn_err}")
+            self.log.error(f"{conn_err}")
+            self.log.info("Is it connected?")
         except Exception as err:
-            log("ANYWAY", f"ERROR: {err}, URL: {self.url}, TOKEN: {self.token}")
-            raise Exception(err)
+            self.log.error(f"{err}")
+            self.log.debug(f"URL: {self.url}, TOKEN: {self.token}")
 
     def get_challenges(self) -> Dict:
         challenges = self.request("GET", "/challenges")

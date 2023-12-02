@@ -10,5 +10,5 @@ URL = "http://127.0.0.1:4000/api/v1"
 x = Client()
 x.setup(URL, TOKEN)
 
-y = Challenge.create("bob", "test")
-x.add_challenge(y)
+x.fetch_challenges()
+print(x.challenges["1"].name)

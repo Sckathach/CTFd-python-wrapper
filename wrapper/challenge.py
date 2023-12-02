@@ -1,7 +1,3 @@
-from .errors import HiddenChallengeError
-from .flag import Flag
-from .logs import log
-
 template = {
     "id": -1,
     "name": "Placeholder",
@@ -95,18 +91,18 @@ class Challenge:
         #  will overwrite the function value of the challenge to ""
         return {
             "id": data["id"],
-            "type": data["type"],
-            "name": data["name"],
+            "type": data.get("type", template["type"]),
+            "name": data.get("name", template["name"]),
             "value": data.get("value", template["value"]),
-            "solves": data["solves"],
-            "category": data["category"],
+            "solves": data.get("solves", template["solves"]),
+            "category": data.get("category", template["category"]),
             "description": data.get("description", template["description"]),
-            "initial": data["initial"],
-            "decay": data["decay"],
-            "minimum": data["minimum"],
+            "initial": data.get("initial", template["initial"]),
+            "decay": data.get("decay", template["decay"]),
+            "minimum": data.get("minimum", template["minimum"]),
             "connection_info": data.get("connection_info", template["connection_info"]),
             "tags": data.get("tags", template["tags"]),
-            "state": data["state"],
+            "state": data.get("state", template["state"]),
             "function": data.get("function", template["function"]),
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"])
