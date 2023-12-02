@@ -1,8 +1,10 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, List
+from .flag import Flag
 import requests as rq
+import json
+
 from .errors import RequestError
 from .logs import Log
-import json
 
 
 class HTTPClient:
@@ -46,7 +48,7 @@ class HTTPClient:
         challenge = self.request("GET", f"/challenges/{challenge_id}")
         return challenge["data"]
 
-    def get_challenge_flags(self, challenge_id=0) -> Dict:
+    def get_challenge_flags(self, challenge_id=0) -> List[Flag]:
         flags = self.request("GET", f"/challenges/{challenge_id}/flags")
         return flags["data"]
 

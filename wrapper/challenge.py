@@ -1,3 +1,6 @@
+from .flag import Flag
+from typing import List
+
 template = {
     "id": -1,
     "name": "Placeholder",
@@ -38,7 +41,7 @@ class Challenge:
         tags=template["tags"],
         max_attempts=template["max_attempts"],
         solved_by_me=template["solved_by_me"],
-        flags=template["flags"]
+        flags: List[Flag] = template["flags"]
     ):
         self.id = id
         self.name = name
@@ -107,33 +110,3 @@ class Challenge:
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"])
         }
-
-    # def add_flag(self, content, flag_type="static", data=""):
-    #     flag = Flag(
-    #         challenge_id=self.id,
-    #         challenge=self.id,
-    #         content=content,
-    #         type=flag_type,
-    #         data=data,
-    #     )
-    #     return flag.push(url=URL, token=TOKEN)
-    #
-    # def attempt(self, flag):
-    #     if self.state == "hidden":
-    #         raise HiddenChallengeError("Impossible to attempt hidden challenge.")
-    #     else:
-    #         result = attempt_challenge(self.id, flag, token=TOKEN, url=URL)["data"]["status"]
-    #         return result == "correct" or result == "already_solved"
-    #
-    # def get_flags(self):
-    #     flags = get_challenge_flags(self.id, token=TOKEN, url=URL)
-    #     self.flags = []
-    #     for f in flags:
-    #         self.flags.append(Flag.from_dict(f))
-    #
-    # def get_flag(self):
-    #     flags = get_challenge_flags(self.id, token=TOKEN, url=URL)
-    #     if len(flags) > 0:
-    #         return flags[0]["content"]
-    #     else:
-    #         return ""
