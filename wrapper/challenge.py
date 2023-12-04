@@ -41,7 +41,7 @@ class Challenge:
         tags=template["tags"],
         max_attempts=template["max_attempts"],
         solved_by_me=template["solved_by_me"],
-        flags: List[Flag] = template["flags"]
+        flags: List[Flag] = template["flags"],
     ):
         self.id = id
         self.name = name
@@ -108,5 +108,5 @@ class Challenge:
             "state": data.get("state", template["state"]),
             "function": data.get("function", template["function"]),
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
-            "solved_by_me": data.get("solved_by_me", template["solved_by_me"])
+            "solved_by_me": data.get("solved_by_me", template["solved_by_me"]),
         }

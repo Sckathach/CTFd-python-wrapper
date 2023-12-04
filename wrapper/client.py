@@ -13,13 +13,15 @@ class Client:
         self.http: HTTPClient = HTTPClient()
         self.challenges: Optional[Dict[str, Challenge]] = {}
         self.users: Optional[Dict[str, User]] = {}
-        self.flags: Optional[Dict[str, Flag]] = {}
+        self.flags: Optional[List[Flag]] = []
         self.log: Log = Log("Client")
 
     def setup(self, url: str, token: str) -> None:
         self.http.token = token
         self.http.url = url
-        self.log.debug(f"self.http.token = {self.http.token}, self.http.url = {self.http.url}")
+        self.log.debug(
+            f"self.http.token = {self.http.token}, self.http.url = {self.http.url}"
+        )
 
     def push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
@@ -57,8 +59,9 @@ class Client:
 
     def fetch_challenge_flags(self, challenge: Challenge) -> List[Flag]:
         flags = self.http.get_challenge_flags(challenge.id)
-        challenge.flags = flags
-        return flags
+        for flag in flags:
+            challenge.flags.append(Flag.from_dict(flag))
+        return challenge.flags
 
     def list_challenges(self) -> None:
         for _, chall in self.challenges.items():
@@ -67,4 +70,6 @@ class Client:
     def fetch_challenges(self) -> None:
         challenges = self.http.get_challenges()
         for chall in challenges:
-            self.challenges[str(chall["id"])] = Challenge.from_dict(chall)
+            id = str(chall["id"])
+            self.challenges[id] = Challenge.from_dict(chall)
+            self.fetch_challenge_flags(self.challenges[id])

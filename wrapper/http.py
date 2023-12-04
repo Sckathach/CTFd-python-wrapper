@@ -14,7 +14,10 @@ class HTTPClient:
         self.log = Log("HTTPClient")
 
     def request(self, request_type, path, data=None):
-        headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
+        headers = {
+            "Authorization": f"Bearer {self.token}",
+            "Content-Type": "application/json",
+        }
         try:
             if request_type == "POST":
                 r = rq.post(self.url + path, json=data, headers=headers)
