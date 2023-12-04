@@ -1,5 +1,5 @@
 from .flag import Flag
-from typing import List
+from typing import List, Dict, Any
 
 template = {
     "id": -1,
@@ -30,17 +30,17 @@ class Challenge:
         category: str = template["category"],
         description: str = template["description"],
         initial: int = template["initial"],
-        value=template["value"],
-        minimum=template["minimum"],
-        function=template["function"],
-        decay=template["decay"],
-        type=template["type"],
-        state=template["state"],
-        solves=template["solves"],
-        connection_info=template["connection_info"],
-        tags=template["tags"],
-        max_attempts=template["max_attempts"],
-        solved_by_me=template["solved_by_me"],
+        value: int = template["value"],
+        minimum: int = template["minimum"],
+        function: str = template["function"],
+        decay: int = template["decay"],
+        type: str = template["type"],
+        state: str = template["state"],
+        solves: int = template["solves"],
+        connection_info: str = template["connection_info"],
+        tags: List[str] = template["tags"],
+        max_attempts: int = template["max_attempts"],
+        solved_by_me: bool = template["solved_by_me"],
         flags: List[Flag] = template["flags"],
     ):
         self.id = id
@@ -61,35 +61,31 @@ class Challenge:
         self.solved_by_me = solved_by_me
         self.flags = flags
 
-    def __str__(self):
+    def __str__(self) -> str:
         # TODO: find a better way to __string__ a challenge
         return self.name
 
     @classmethod
-    def from_dict(cls, dict):
+    def from_dict(cls, dict: Dict[str, Any]) -> 'Challenge':
         return cls(**cls.filter_dict(dict))
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
         return self.__dict__
 
     @classmethod
     def create(
         cls,
-        name,
-        category,
-        description=template["description"],
-        initial=template["initial"],
-    ):
+        name: str,
+        category: str,
+        description: str = template["description"],
+        initial: int = template["initial"],
+    ) -> 'Challenge':
         return Challenge(
             name=name, category=category, description=description, initial=initial
         )
 
-    # @classmethod
-    # def get(cls, challenge_id):
-    #     return cls.from_dict(get_challenge(challenge_id, token=TOKEN, url=URL))
-
     @classmethod
-    def filter_dict(cls, data):
+    def filter_dict(cls, data: Dict[str, Any]) -> Dict[str, Any]:
         # TODO: fix the overwrites, for example, "function" is not present in the respone of the GET request so it
         #  will overwrite the function value of the challenge to ""
         return {

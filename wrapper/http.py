@@ -1,4 +1,4 @@
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 from .flag import Flag
 import requests as rq
 import json
@@ -13,7 +13,7 @@ class HTTPClient:
         self.url: Optional[str] = None
         self.log = Log("HTTPClient")
 
-    def request(self, request_type, path, data=None):
+    def request(self, request_type: str, path: str, data: Dict[str, Any] = None) -> Dict[str, Any]:
         headers = {
             "Authorization": f"Bearer {self.token}",
             "Content-Type": "application/json",
@@ -43,22 +43,22 @@ class HTTPClient:
             self.log.error(f"{err}")
             self.log.debug(f"URL: {self.url}, TOKEN: {self.token}")
 
-    def get_challenges(self) -> Dict:
+    def get_challenges(self) -> Dict[str, Any]:
         challenges = self.request("GET", "/challenges")
         return challenges["data"]
 
-    def get_challenge(self, challenge_id=0) -> Dict:
+    def get_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
         challenge = self.request("GET", f"/challenges/{challenge_id}")
         return challenge["data"]
 
-    def get_challenge_flags(self, challenge_id=0) -> List[Flag]:
+    def get_challenge_flags(self, challenge_id: int = 0) -> List[Dict[str, Any]]:
         flags = self.request("GET", f"/challenges/{challenge_id}/flags")
         return flags["data"]
 
-    def delete_challenge(self, challenge_id=0) -> Dict:
+    def delete_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
         return self.request("DELETE", f"/challenges/{challenge_id}")
 
-    def create_user(self, data) -> Dict:
+    def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
             "name": data["name"],
             "email": data["email"],
@@ -70,7 +70,7 @@ class HTTPClient:
         }
         return self.request("POST", "/users", data=d)
 
-    def create_challenge(self, data) -> Dict:
+    def create_challenge(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
             "name": data["name"],
             "category": data["category"],
