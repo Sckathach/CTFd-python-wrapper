@@ -43,7 +43,7 @@ class HTTPClient:
             self.log.error(f"{err}")
             self.log.debug(f"URL: {self.url}, TOKEN: {self.token}")
 
-    def get_challenges(self) -> Dict[str, Any]:
+    def get_challenges(self) -> List[Dict[str, Any]]:
         challenges = self.request("GET", "/challenges")
         return challenges["data"]
 

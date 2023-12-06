@@ -11,5 +11,9 @@ client = Client()
 client.setup(URL, TOKEN)
 
 client.fetch_challenges()
-client.list_challenges()
+
 x = client.challenges["1"]
+f = Flag.create("Test{YOOOOOOOOOOOOo}", x.id)
+x.flags = [f]
+x.name = "bob2"
+client.update_challenge(x)

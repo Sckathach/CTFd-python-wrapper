@@ -56,8 +56,8 @@ class Flag:
         return self.__dict__
 
     @classmethod
-    def from_dict(cls, dict: Dict[str, Any]) -> 'Flag':
-        return cls(**cls.filter_dict(dict))
+    def from_dict(cls, data: Dict[str, Any]) -> 'Flag':
+        return cls(**cls.filter_dict(data))
 
     @classmethod
     def filter_dict(cls, data: Dict[str, Any]) -> Dict[str, Any]:

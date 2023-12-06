@@ -66,8 +66,8 @@ class Challenge:
         return self.name
 
     @classmethod
-    def from_dict(cls, dict: Dict[str, Any]) -> 'Challenge':
-        return cls(**cls.filter_dict(dict))
+    def from_dict(cls, data: Dict[str, Any]) -> 'Challenge':
+        return cls(**cls.filter_dict(data))
 
     def to_dict(self) -> Dict[str, Any]:
         return self.__dict__
