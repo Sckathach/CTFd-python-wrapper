@@ -34,7 +34,7 @@ class HTTPClient:
                 raise RequestError(f"{request_type} error with status: {r.status_code}")
             else:
                 self.log.info(f"POST {path} SUCCESS")
-                self.log.debug(f"{json.dumps(data, indent=4)}")
+                self.log.debug(f"{json.dumps(r.json(), indent=4)}")
             return r.json()
         except ConnectionError as conn_err:
             self.log.error(f"{conn_err}")

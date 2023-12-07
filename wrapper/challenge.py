@@ -106,3 +106,10 @@ class Challenge:
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"]),
         }
+
+    def add_flag(self, flag: Flag) -> None:
+        flag.challenge = self.id
+        flag.challenge_id = self.id
+        if flag not in self.flags:
+            self.flags.append(flag)
+        self.flags.append(flag)

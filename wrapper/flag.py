@@ -32,11 +32,13 @@ class Flag:
         return self.content
 
     def __eq__(self, other: 'Flag') -> bool:
+        # Check if two flags are equals before push, which means it does not look the flag.id which is not properly set
+        # yet.
         if isinstance(other, Flag):
             return (
-                self.id == other.id
-                and self.id == other.id
-                and self.challenge == other.challenge
+                # self.id == other.id
+                self.challenge == other.challenge
+                and self.challenge_id == other.challenge_id
                 and self.type == other.type
                 and self.content == other.content
                 and self.data == other.data
@@ -48,9 +50,9 @@ class Flag:
     def create(
         cls,
         content: str,
-        challenge: int,
+        challenge_id: int = -1,
     ) -> 'Flag':
-        return Flag(content=content, challenge=challenge)
+        return Flag(content=content, challenge=challenge_id)
 
     def to_dict(self) -> Dict[str, Any]:
         return self.__dict__

@@ -1,22 +1,21 @@
+
 class Log:
     def __init__(self, from_):
-        self.minimal: bool = True
-        self.simple: bool = True
-        self.full: bool = False
         self.from_: str = from_
+        self.level: int = 1
 
     def info(self, message: str):
-        if self.simple:
+        if self.level >= 2:
             print(f"-- INFO: {message}")
 
     def warning(self, message: str):
-        if self.simple:
+        if self.level >= 2:
             print(f"-- WARNING: {message}")
 
     def error(self, message: str):
-        if self.minimal:
+        if self.level >= 1:
             print(f"-- ERROR: ({self.from_}) {message}")
 
     def debug(self, message: str):
-        if self.full:
+        if self.level >= 3:
             print(f"-- DEBUG: ({self.from_}) {message}")

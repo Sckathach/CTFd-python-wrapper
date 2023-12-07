@@ -1,14 +1,27 @@
+
+template = {
+    "id": -1,
+    "name": "bob",
+    "email": "bob@bob.bob",
+    "password": "password",
+    "type": "user",
+    "verified": False,
+    "hidden": False,
+    "banned": False
+}
+
+
 class User:
     def __init__(
         self,
-        id,
-        name,
-        email,
-        password,
-        type="user",
-        verified=False,
-        hidden=False,
-        banned=False,
+        id: int = template["id"],
+        name: str = template["name"],
+        email: str = template["email"],
+        password: str = template["password"],
+        type: str = template["type"],
+        verified: bool = template["verified"],
+        hidden: bool = template["hidden"],
+        banned: bool = template["banned"]
     ):
         self.id = id
         self.name = name
@@ -20,7 +33,8 @@ class User:
         self.banned = banned
 
     def __str__(self) -> str:
-        return f"User(id={self.id}, name={self.name}, email={self.email}, password={self.password}, type={self.type}, verified={self.verified}, hidden={self.hidden}, banned={self.banned})"
+        return (f"User(id={self.id}, name={self.name}, email={self.email}, password={self.password}, type={self.type}, "
+                f"verified={self.verified}, hidden={self.hidden}, banned={self.banned})")
 
     def to_dict(self):
         return self.__dict__
@@ -36,11 +50,6 @@ class User:
         email = name + "@sckathach.ai"
         password = name + "pass"
         return User(id, name, email, password)
-
-    # def push(self):
-    #     data = self.to_dict()
-    #     print(f"The user {self.name}, will be pushed with information: {data}")
-    #     create_user(data)
 
     @classmethod
     def filter_dict(cls, data):
