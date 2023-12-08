@@ -31,7 +31,7 @@ class Flag:
         # TODO: find a better way to __string__ a flag
         return self.content
 
-    def __eq__(self, other: 'Flag') -> bool:
+    def __eq__(self, other: "Flag") -> bool:
         # Check if two flags are equals before push, which means it does not look the flag.id which is not properly set
         # yet.
         if isinstance(other, Flag):
@@ -51,14 +51,14 @@ class Flag:
         cls,
         content: str,
         challenge_id: int = -1,
-    ) -> 'Flag':
+    ) -> "Flag":
         return Flag(content=content, challenge=challenge_id)
 
     def to_dict(self) -> Dict[str, Any]:
         return self.__dict__
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Flag':
+    def from_dict(cls, data: Dict[str, Any]) -> "Flag":
         return cls(**cls.filter_dict(data))
 
     @classmethod

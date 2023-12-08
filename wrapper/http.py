@@ -13,7 +13,9 @@ class HTTPClient:
         self.url: Optional[str] = None
         self.log = Log("HTTPClient")
 
-    def request(self, request_type: str, path: str, data: Dict[str, Any] = None) -> Dict[str, Any]:
+    def request(
+        self, request_type: str, path: str, data: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
         headers = {
             "Authorization": f"Bearer {self.token}",
             "Content-Type": "application/json",

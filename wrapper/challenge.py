@@ -66,7 +66,7 @@ class Challenge:
         return self.name
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Challenge':
+    def from_dict(cls, data: Dict[str, Any]) -> "Challenge":
         return cls(**cls.filter_dict(data))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,7 +79,7 @@ class Challenge:
         category: str,
         description: str = template["description"],
         initial: int = template["initial"],
-    ) -> 'Challenge':
+    ) -> "Challenge":
         return Challenge(
             name=name, category=category, description=description, initial=initial
         )

@@ -1,4 +1,3 @@
-
 class Log:
     def __init__(self, from_):
         self.from_: str = from_

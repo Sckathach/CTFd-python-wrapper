@@ -16,7 +16,9 @@ class Client:
         self.flags: Optional[List[Flag]] = []
         self.log: Log = Log("Client")
 
-    def setup(self, url: str, token: str, verbose: str = "minimal", secret_threshold: int = 4) -> None:
+    def setup(
+        self, url: str, token: str, verbose: str = "minimal", secret_threshold: int = 4
+    ) -> None:
         self.http.token = token
         self.http.url = url
 

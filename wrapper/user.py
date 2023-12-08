@@ -1,4 +1,3 @@
-
 template = {
     "id": -1,
     "name": "bob",
@@ -7,7 +6,7 @@ template = {
     "type": "user",
     "verified": False,
     "hidden": False,
-    "banned": False
+    "banned": False,
 }
 
 
@@ -21,7 +20,7 @@ class User:
         type: str = template["type"],
         verified: bool = template["verified"],
         hidden: bool = template["hidden"],
-        banned: bool = template["banned"]
+        banned: bool = template["banned"],
     ):
         self.id = id
         self.name = name
@@ -33,8 +32,10 @@ class User:
         self.banned = banned
 
     def __str__(self) -> str:
-        return (f"User(id={self.id}, name={self.name}, email={self.email}, password={self.password}, type={self.type}, "
-                f"verified={self.verified}, hidden={self.hidden}, banned={self.banned})")
+        return (
+            f"User(id={self.id}, name={self.name}, email={self.email}, password={self.password}, type={self.type}, "
+            f"verified={self.verified}, hidden={self.hidden}, banned={self.banned})"
+        )
 
     def to_dict(self):
         return self.__dict__
