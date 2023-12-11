@@ -54,6 +54,7 @@ class HTTPClient:
     """
         Challenges 
     """
+
     def get_challenges(self) -> List[Dict[str, Any]]:
         challenges = self.request("GET", "/challenges?view=admin")
         return challenges["data"]
@@ -105,6 +106,7 @@ class HTTPClient:
     """
         Users 
     """
+
     def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
             "name": data["name"],
@@ -124,6 +126,7 @@ class HTTPClient:
     """
         Flags
     """
+
     def create_flag(self, data) -> Dict:
         d = {
             "content": data["content"],

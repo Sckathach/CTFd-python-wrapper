@@ -7,7 +7,7 @@ template = {
     "verified": False,
     "hidden": False,
     "banned": False,
-    "token": "ctfd_6327657374206c6520746f6b656e207375706572207365637265742021"
+    "token": "ctfd_6327657374206c6520746f6b656e207375706572207365637265742021",
 }
 
 
@@ -22,7 +22,7 @@ class User:
         verified: bool = template["verified"],
         hidden: bool = template["hidden"],
         banned: bool = template["banned"],
-        token: str = template["token"]
+        token: str = template["token"],
     ):
         self.id = id
         self.name = name

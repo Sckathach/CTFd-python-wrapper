@@ -25,5 +25,3 @@ print(client.attempt_challenge(x, "flag"))
 #     f = Flag.create("flag", x.id)
 #     f = client.add_flag(f)
 #     print(f"Chall : {x}")
-
-

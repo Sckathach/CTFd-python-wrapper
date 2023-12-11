@@ -47,6 +47,7 @@ class Client:
     """
         Challenges 
     """
+
     def _push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.create_challenge(data)
@@ -92,6 +93,7 @@ class Client:
     """
         Flags 
     """
+
     def _push_flag(self, flag: Flag) -> Flag:
         data = flag.to_dict()
         response = self.http.create_flag(data)
@@ -111,6 +113,7 @@ class Client:
     """
         Users 
     """
+
     def add_user(self, user: User) -> User:
         data = self.http.create_user(user.to_dict())
         self.users[str(user.id)] = user
