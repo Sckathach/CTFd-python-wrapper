@@ -13,7 +13,7 @@ class Client:
         self.http: HTTPClient = HTTPClient()
         self.challenges: Optional[Dict[str, Challenge]] = {}
         self.users: Optional[Dict[str, User]] = {}
-        self.flags: Optional[List[Flag]] = []
+        self.flags: Optional[Dict[str, Flag]] = {}
         self.log: Log = Log("Client")
 
     def setup(
@@ -44,70 +44,31 @@ class Client:
             f"self.http.token = {token_show}, self.http.url = {self.http.url}"
         )
 
+    """
+        Challenges 
+    """
     def _push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.create_challenge(data)
         challenge.id = response["data"]["id"]
         return challenge
 
-    def _push_flag(self, flag: Flag) -> Flag:
-        data = flag.to_dict()
-        response = self.http.create_flag(data)
-        flag.id = response["data"]["id"]
-        return flag
-
     def update_challenge(self, challenge: Challenge) -> Challenge:
-        # flags = challenge.flags
-        # flags_remote = self.fetch_challenge_flags(challenge)
-        # print("Flags remote: ")
-        # for f in flags_remote:
-        #     print(f)
-        # print("*********************************")
-        # new_flags = []
-        # new_flags_remote = []
-        # for f in flags:
-        #     if f not in flags_remote:
-        #         new_flags.append(f)
-        #     else:
-        #         print(f"{f} is in {flags_remote}")
-        # for i in range(len(new_flags)):
-        #     f = new_flags.pop()
-        #     f.challenge_id = challenge.id
-        #     f.challenge = challenge.id
-        #     f = self._push_flag(f)
-        #     print(f"flag {f} pushed")
-        #     new_flags_remote.append(f)
-        # challenge.flags = new_flags_remote
-        # self.challenges[str(challenge.id)] = challenge
         data = challenge.to_dict()
         response = self.http.update_challenge(data)
         return Challenge.from_dict(response["data"])
 
-    def add_challenge(self, challenge: Challenge) -> None:
+    def add_challenge(self, challenge: Challenge) -> Challenge:
         c = self._push_challenge(challenge)
-        new_flags = []
-        if len(c.flags) > 0:
-            for flag in c.flags:
-                flag.challenge_id = c.id
-                flag.challenge = c.id
-                f = self._push_flag(flag)
-                flag.id = f.id
-                new_flags.append(f)
-        c.flags = new_flags
         self.challenges[str(c.id)] = c
+        return c
 
     def attempt_challenge(self, challenge: Challenge, attempt: str) -> bool:
         if challenge.state == "hidden":
             raise HiddenChallengeError("Impossible to attempt hidden challenge.")
         else:
-            result = self.http.attempt_challenge(challenge.id, attempt)
+            result = self.http.attempt_challenge(challenge.id, attempt)["status"]
             return result == "correct" or result == "already_solved"
-
-    def fetch_challenge_flags(self, challenge: Challenge) -> List[Flag]:
-        flags = self.http.get_challenge_flags(challenge.id)
-        for flag in flags:
-            challenge.flags.append(Flag.from_dict(flag))
-        return challenge.flags
 
     def list_challenges(self) -> None:
         for _, chall in self.challenges.items():
@@ -116,15 +77,40 @@ class Client:
     def fetch_challenges(self) -> None:
         challenges = self.http.get_challenges()
         for chall in challenges:
-            chall_id = str(chall["id"])
-            self.challenges[chall_id] = Challenge.from_dict(chall)
-            self.fetch_challenge_flags(self.challenges[chall_id])
+            self.challenges[str(chall["id"])] = Challenge.from_dict(chall)
 
-    def delete_challenge(self, challenge: Challenge) -> None:
-        self.challenges.pop(str(challenge.id))
-        self.http.delete_challenge(challenge.id)
+    def delete_challenge(self, challenge_id: int) -> None:
+        self.challenges.pop(str(challenge_id))
+        self.log.debug(f"Challenge {challenge_id} deleted.")
 
-    # Users
+    def delete_challenges(self) -> None:
+        for _, chall in self.challenges.items():
+            self.http.delete_challenge(chall.id)
+            self.log.debug(f"Challenge {chall.id} deleted.")
+        self.challenges = {}
+
+    """
+        Flags 
+    """
+    def _push_flag(self, flag: Flag) -> Flag:
+        data = flag.to_dict()
+        response = self.http.create_flag(data)
+        flag.id = response["data"]["id"]
+        return flag
+
+    def add_flag(self, flag: Flag) -> Flag:
+        f = self._push_flag(flag)
+        self.flags[str(f.id)] = f
+        return f
+
+    def fetch_challenge_flags(self, challenge_id: int) -> None:
+        flags = self.http.get_challenge_flags(challenge_id)
+        for flag in flags:
+            self.flags[str(flag["id"])] = Flag.from_dict(flag)
+
+    """
+        Users 
+    """
     def add_user(self, user: User) -> User:
         data = self.http.create_user(user.to_dict())
         self.users[str(user.id)] = user

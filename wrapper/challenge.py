@@ -1,4 +1,3 @@
-from .flag import Flag
 from typing import List, Dict, Any
 
 template = {
@@ -41,7 +40,6 @@ class Challenge:
         tags: List[str] = template["tags"],
         max_attempts: int = template["max_attempts"],
         solved_by_me: bool = template["solved_by_me"],
-        flags: List[Flag] = template["flags"],
     ):
         self.id = id
         self.name = name
@@ -59,7 +57,6 @@ class Challenge:
         self.tags = tags
         self.max_attempts = max_attempts
         self.solved_by_me = solved_by_me
-        self.flags = flags
 
     def __str__(self) -> str:
         # TODO: find a better way to __string__ a challenge
@@ -106,10 +103,3 @@ class Challenge:
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"]),
         }
-
-    def add_flag(self, flag: Flag) -> None:
-        flag.challenge = self.id
-        flag.challenge_id = self.id
-        if flag not in self.flags:
-            self.flags.append(flag)
-        self.flags.append(flag)

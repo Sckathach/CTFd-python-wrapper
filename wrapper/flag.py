@@ -50,9 +50,9 @@ class Flag:
     def create(
         cls,
         content: str,
-        challenge_id: int = -1,
+        challenge_id: int,
     ) -> "Flag":
-        return Flag(content=content, challenge=challenge_id)
+        return Flag(content=content, challenge=challenge_id, challenge_id=challenge_id)
 
     def to_dict(self) -> Dict[str, Any]:
         return self.__dict__

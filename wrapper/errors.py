@@ -1,8 +1,10 @@
 class HiddenChallengeError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
 
 
 class RequestError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
+
+
+class CTFdAPIError(Exception):
+    pass

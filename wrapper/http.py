@@ -3,7 +3,7 @@ from .flag import Flag
 import requests as rq
 import json
 
-from .errors import RequestError
+from .errors import RequestError, CTFdAPIError
 from .logs import Log
 
 
@@ -35,9 +35,15 @@ class HTTPClient:
             if r.status_code != 200:
                 raise RequestError(f"{request_type} error with status: {r.status_code}")
             else:
-                self.log.info(f"POST {path} SUCCESS")
-                self.log.debug(f"{json.dumps(r.json(), indent=4)}")
-            return r.json()
+                rj = r.json()
+                if "success" in rj.keys() and rj["success"]:
+                    self.log.info(f"{request_type} {path} SUCCESS")
+                    self.log.debug(f"{json.dumps(rj, indent=4)}")
+                    return rj
+                else:
+                    self.log.info(f"{request_type} {path} ERROR")
+                    # self.log.error(f"{json.dumps(rj, indent=4)}")
+                    raise CTFdAPIError(f"{json.dumps(rj, indent=4)}")
         except ConnectionError as conn_err:
             self.log.error(f"{conn_err}")
             self.log.info("Is it connected?")
@@ -45,8 +51,11 @@ class HTTPClient:
             self.log.error(f"{err}")
             self.log.debug(f"URL: {self.url}, TOKEN: {self.token}")
 
+    """
+        Challenges 
+    """
     def get_challenges(self) -> List[Dict[str, Any]]:
-        challenges = self.request("GET", "/challenges")
+        challenges = self.request("GET", "/challenges?view=admin")
         return challenges["data"]
 
     def get_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
@@ -59,18 +68,6 @@ class HTTPClient:
 
     def delete_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
         return self.request("DELETE", f"/challenges/{challenge_id}")
-
-    def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        d = {
-            "name": data["name"],
-            "email": data["email"],
-            "password": data["password"],
-            "type": data["type"],
-            "verified": data["verified"],
-            "hidden": data["hidden"],
-            "banned": data["banned"],
-        }
-        return self.request("POST", "/users", data=d)
 
     def create_challenge(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
@@ -88,7 +85,7 @@ class HTTPClient:
 
     def attempt_challenge(self, challenge_id, flag) -> Dict:
         d = {"challenge_id": challenge_id, "submission": flag}
-        return self.request("POST", "/challenges/attempt", data=d)
+        return self.request("POST", "/challenges/attempt", data=d)["data"]
 
     def update_challenge(self, data) -> Dict:
         d = {
@@ -105,6 +102,28 @@ class HTTPClient:
         }
         return self.request("PATCH", f'/challenges/{data["id"]}', data=d)
 
+    """
+        Users 
+    """
+    def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        d = {
+            "name": data["name"],
+            "email": data["email"],
+            "password": data["password"],
+            "type": data["type"],
+            "verified": data["verified"],
+            "hidden": data["hidden"],
+            "banned": data["banned"],
+        }
+        return self.request("POST", "/users", data=d)
+
+    def create_token(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        d = {"description": data["description"], "expiration": data["expiration"]}
+        return self.request("POST", "/tokens", data=d)["data"]
+
+    """
+        Flags
+    """
     def create_flag(self, data) -> Dict:
         d = {
             "content": data["content"],

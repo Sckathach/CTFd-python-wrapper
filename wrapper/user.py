@@ -7,6 +7,7 @@ template = {
     "verified": False,
     "hidden": False,
     "banned": False,
+    "token": "ctfd_6327657374206c6520746f6b656e207375706572207365637265742021"
 }
 
 
@@ -21,6 +22,7 @@ class User:
         verified: bool = template["verified"],
         hidden: bool = template["hidden"],
         banned: bool = template["banned"],
+        token: str = template["token"]
     ):
         self.id = id
         self.name = name
@@ -30,6 +32,7 @@ class User:
         self.verified = verified
         self.hidden = hidden
         self.banned = banned
+        self.token = token
 
     def __str__(self) -> str:
         return (
@@ -44,13 +47,6 @@ class User:
     def from_dict(cls, data):
         print(f"Creating user from data: {data}")
         return cls(**cls.filter_dict(data))
-
-    @classmethod
-    def create(cls, name):
-        id = -1
-        email = name + "@sckathach.ai"
-        password = name + "pass"
-        return User(id, name, email, password)
 
     @classmethod
     def filter_dict(cls, data):
