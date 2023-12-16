@@ -1,3 +1,4 @@
+import re
 from typing import Dict, Any
 
 template = {
@@ -28,8 +29,7 @@ class Flag:
         self.data = data
 
     def __str__(self) -> str:
-        # TODO: find a better way to __string__ a flag
-        return self.content
+        return f"Flag(id={self.id}, challenge={self.challenge}, type={self.type}, content={self.content})"
 
     def __eq__(self, other: "Flag") -> bool:
         # Check if two flags are equals before push, which means it does not look the flag.id which is not properly set
@@ -64,10 +64,29 @@ class Flag:
     @classmethod
     def filter_dict(cls, data: Dict[str, Any]) -> Dict[str, Any]:
         return {
-            "challenge_id": data["challenge_id"],
             "id": data["id"],
             "challenge": data["challenge"],
-            "type": data["type"],
-            "content": data["content"],
-            "data": data["data"],
+            "challenge_id": data["challenge_id"],
+            "type": data.get("type", template["type"]),
+            "content": data.get("content", template["content"]),
+            "data": data.get("data", template["data"])
         }
+
+    def check(self, provided: str) -> bool:
+        if self.type == "static":
+            if len(self.content) != len(provided):
+                return False
+            result = 0
+            if self.data == "case_insensitive":
+                for x, y in zip(self.content.lower(), provided.lower()):
+                    result |= ord(x) ^ ord(y)
+            else:
+                for x, y in zip(self.content, provided):
+                    result |= ord(x) ^ ord(y)
+            return result == 0
+        else:
+            if self.data == "case_insensitive":
+                result = re.match(self.content, provided, re.IGNORECASE)
+            else:
+                result = re.match(self.content, provided)
+            return result and result.group() == provided

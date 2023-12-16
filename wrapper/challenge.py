@@ -16,8 +16,7 @@ template = {
     "connection_info": " ",  # Is recognized as None when I use ""...
     "tags": [],
     "max_attempts": 0,
-    "solved_by_me": False,
-    "flags": [],
+    "solved_by_me": False
 }
 
 
@@ -59,8 +58,10 @@ class Challenge:
         self.solved_by_me = solved_by_me
 
     def __str__(self) -> str:
-        # TODO: find a better way to __string__ a challenge
-        return self.name
+        return (
+                f"Challenge(id={self.id}, name={self.name}, category={self.category}, type={self.type}, "
+                f"state={self.state}, solves={self.solves})"
+        )
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Challenge":
@@ -103,3 +104,5 @@ class Challenge:
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"]),
         }
+
+

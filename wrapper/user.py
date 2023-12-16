@@ -45,7 +45,6 @@ class User:
 
     @classmethod
     def from_dict(cls, data):
-        print(f"Creating user from data: {data}")
         return cls(**cls.filter_dict(data))
 
     @classmethod
@@ -53,10 +52,10 @@ class User:
         return {
             "id": data["id"],
             "name": data["name"],
-            "email": data["email"],
-            "password": data["password"],
-            "type": data["type"],
-            "verified": data["verified"],
-            "hidden": data["hidden"],
-            "banned": data["banned"],
+            "email": data.get("email", template["email"]),
+            "password": data.get("password", template["password"]),
+            "type": data.get("type", template["type"]),
+            "verified": data.get("verified", template["verified"]),
+            "hidden": data.get("hidden", template["hidden"]),
+            "banned": data.get("banned", template["banned"])
         }

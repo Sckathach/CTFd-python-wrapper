@@ -47,29 +47,39 @@ class Client:
     """
         Challenges 
     """
-
     def _push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.create_challenge(data)
-        challenge.id = response["data"]["id"]
+        challenge.id = response["id"]
         return challenge
 
     def update_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.update_challenge(data)
-        return Challenge.from_dict(response["data"])
+        return Challenge.from_dict(response)
 
     def add_challenge(self, challenge: Challenge) -> Challenge:
         c = self._push_challenge(challenge)
         self.challenges[str(c.id)] = c
         return c
 
-    def attempt_challenge(self, challenge: Challenge, attempt: str) -> bool:
+    def attempt_challenge_with_ctfd_check(
+            self, challenge: Challenge, attempt: str, token: Optional[str] = None
+    ) -> bool:
         if challenge.state == "hidden":
             raise HiddenChallengeError("Impossible to attempt hidden challenge.")
         else:
-            result = self.http.attempt_challenge(challenge.id, attempt)["status"]
+            result = self.http.attempt_challenge(challenge.id, attempt, token=token)["status"]
             return result == "correct" or result == "already_solved"
+
+    # def attempt_challenge(
+    #         self, provided: str, challenge: Challenge, user_id: int, team_id: Optional[int] = None
+    # ) -> bool:
+    #     if challenge.attempt(provided):
+    #         self.http.submission(challenge.id, user_id, team_id)
+    #         return True
+    #     else:
+    #         return False
 
     def list_challenges(self) -> None:
         for _, chall in self.challenges.items():
@@ -93,11 +103,10 @@ class Client:
     """
         Flags 
     """
-
     def _push_flag(self, flag: Flag) -> Flag:
         data = flag.to_dict()
         response = self.http.create_flag(data)
-        flag.id = response["data"]["id"]
+        flag.id = response["id"]
         return flag
 
     def add_flag(self, flag: Flag) -> Flag:
@@ -105,16 +114,26 @@ class Client:
         self.flags[str(f.id)] = f
         return f
 
-    def fetch_challenge_flags(self, challenge_id: int) -> None:
-        flags = self.http.get_challenge_flags(challenge_id)
+    # def fetch_challenge_flags(self, challenge_id: int) -> None:
+    #     flags = self.http.get_challenge_flags(challenge_id)
+    #     for flag in flags:
+    #         f = Flag.from_dict(flag)
+    #         self.flags[str(flag["id"])] = f
+
+    def fetch_flags(self) -> None:
+        flags = self.http.get_flags()
         for flag in flags:
             self.flags[str(flag["id"])] = Flag.from_dict(flag)
 
     """
         Users 
     """
-
     def add_user(self, user: User) -> User:
         data = self.http.create_user(user.to_dict())
         self.users[str(user.id)] = user
         return User.from_dict(data)
+
+    def fetch_users(self) -> None:
+        users = self.http.get_users()
+        for user in users:
+            self.users[str(user["id"])] = User.from_dict(user)

@@ -9,13 +9,20 @@ TOKEN = os.getenv("TOKEN")
 URL = "http://127.0.0.1:4000/api/v1"
 
 client = Client()
-TOKEN = "ctfd_d8bb6f6a5154ad987706c977f0699607e19dae0cc9ed77b75eb011ad3055fc89"
-client.setup(URL, TOKEN, verbose="debug")
+# USER_TOKEN = "ctfd_d8bb6f6a5154ad987706c977f0699607e19dae0cc9ed77b75eb011ad3055fc89"
+client.setup(URL, TOKEN, verbose="none")
 
 client.fetch_challenges()
-x = client.challenges["2"]
-print(x)
-print(client.attempt_challenge(x, "flag"))
+client.fetch_users()
+client.fetch_flags()
+
+for _, user in client.users.items():
+    print(user)
+for _, challenge in client.challenges.items():
+    print(challenge)
+for _, flag in client.flags.items():
+    print(flag)
+
 
 # client.delete_challenges()
 # for i in range(100):

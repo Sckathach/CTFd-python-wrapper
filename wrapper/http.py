@@ -14,10 +14,10 @@ class HTTPClient:
         self.log = Log("HTTPClient")
 
     def request(
-        self, request_type: str, path: str, data: Dict[str, Any] = None
+        self, request_type: str, path: str, data: Dict[str, Any] = None, token: Optional[str] = None
     ) -> Dict[str, Any]:
         headers = {
-            "Authorization": f"Bearer {self.token}",
+            "Authorization": f"Bearer {token if token else self.token}",
             "Content-Type": "application/json",
         }
         try:
@@ -54,18 +54,14 @@ class HTTPClient:
     """
         Challenges 
     """
-
     def get_challenges(self) -> List[Dict[str, Any]]:
-        challenges = self.request("GET", "/challenges?view=admin")
-        return challenges["data"]
+        return self.request("GET", "/challenges?view=admin")["data"]
 
     def get_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
-        challenge = self.request("GET", f"/challenges/{challenge_id}")
-        return challenge["data"]
+        return self.request("GET", f"/challenges/{challenge_id}")["data"]
 
     def get_challenge_flags(self, challenge_id: int = 0) -> List[Dict[str, Any]]:
-        flags = self.request("GET", f"/challenges/{challenge_id}/flags")
-        return flags["data"]
+        return self.request("GET", f"/challenges/{challenge_id}/flags")["data"]
 
     def delete_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
         return self.request("DELETE", f"/challenges/{challenge_id}")
@@ -82,13 +78,25 @@ class HTTPClient:
             "state": data["state"],
             "type": data["type"],
         }
-        return self.request("POST", "/challenges", data=d)
+        return self.request("POST", "/challenges", data=d)["data"]
 
-    def attempt_challenge(self, challenge_id, flag) -> Dict:
+    def attempt_challenge(self, challenge_id: int, flag: str, token: Optional[str] = None) -> Dict[str, Any]:
         d = {"challenge_id": challenge_id, "submission": flag}
-        return self.request("POST", "/challenges/attempt", data=d)["data"]
+        return self.request("POST", "/challenges/attempt", data=d, token=token)["data"]
 
-    def update_challenge(self, data) -> Dict:
+    def submission(
+            self, challenge_id: int, user_id: int, team_id: Optional[int] = None, token: Optional[str] = None
+    ) -> Dict[str, Any]:
+        d = {
+            "provided": "MARKED AS SOLVED BY ADMIN",
+            "user_id": user_id,
+            "team_id": team_id,
+            "challenge_id": challenge_id,
+            "type": "correct"
+        }
+        return self.request("POST", "/submissions", data=d, token=token)["data"]
+
+    def update_challenge(self, data) -> Dict[str, Any]:
         d = {
             "name": data["name"],
             "category": data["category"],
@@ -101,11 +109,13 @@ class HTTPClient:
             "max_attempts": data["max_attempts"],
             "state": data["state"],
         }
-        return self.request("PATCH", f'/challenges/{data["id"]}', data=d)
+        return self.request("PATCH", f'/challenges/{data["id"]}', data=d)["data"]
 
     """
         Users 
     """
+    def get_users(self) -> List[Dict[str, Any]]:
+        return self.request("GET", "/users")["data"]
 
     def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
@@ -117,21 +127,19 @@ class HTTPClient:
             "hidden": data["hidden"],
             "banned": data["banned"],
         }
-        return self.request("POST", "/users", data=d)
-
-    def create_token(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        d = {"description": data["description"], "expiration": data["expiration"]}
-        return self.request("POST", "/tokens", data=d)["data"]
+        return self.request("POST", "/users", data=d)["data"]
 
     """
         Flags
     """
-
-    def create_flag(self, data) -> Dict:
+    def create_flag(self, data) -> Dict[str, Any]:
         d = {
             "content": data["content"],
             "data": data["data"],
             "type": data["type"],
             "challenge": data["challenge"],
         }
-        return self.request("POST", "/flags", data=d)
+        return self.request("POST", "/flags", data=d)["data"]
+
+    def get_flags(self) -> List[Dict[str, Any]]:
+        return self.request("GET", "/flags")["data"]
