@@ -57,5 +57,5 @@ class User:
             "type": data.get("type", template["type"]),
             "verified": data.get("verified", template["verified"]),
             "hidden": data.get("hidden", template["hidden"]),
-            "banned": data.get("banned", template["banned"])
+            "banned": data.get("banned", template["banned"]),
         }

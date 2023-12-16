@@ -14,7 +14,11 @@ class HTTPClient:
         self.log = Log("HTTPClient")
 
     def request(
-        self, request_type: str, path: str, data: Dict[str, Any] = None, token: Optional[str] = None
+        self,
+        request_type: str,
+        path: str,
+        data: Dict[str, Any] = None,
+        token: Optional[str] = None,
     ) -> Dict[str, Any]:
         headers = {
             "Authorization": f"Bearer {token if token else self.token}",
@@ -54,6 +58,7 @@ class HTTPClient:
     """
         Challenges 
     """
+
     def get_challenges(self) -> List[Dict[str, Any]]:
         return self.request("GET", "/challenges?view=admin")["data"]
 
@@ -80,19 +85,25 @@ class HTTPClient:
         }
         return self.request("POST", "/challenges", data=d)["data"]
 
-    def attempt_challenge(self, challenge_id: int, flag: str, token: Optional[str] = None) -> Dict[str, Any]:
+    def attempt_challenge(
+        self, challenge_id: int, flag: str, token: Optional[str] = None
+    ) -> Dict[str, Any]:
         d = {"challenge_id": challenge_id, "submission": flag}
         return self.request("POST", "/challenges/attempt", data=d, token=token)["data"]
 
     def submission(
-            self, challenge_id: int, user_id: int, team_id: Optional[int] = None, token: Optional[str] = None
+        self,
+        challenge_id: int,
+        user_id: int,
+        team_id: Optional[int] = None,
+        token: Optional[str] = None,
     ) -> Dict[str, Any]:
         d = {
             "provided": "MARKED AS SOLVED BY ADMIN",
             "user_id": user_id,
             "team_id": team_id,
             "challenge_id": challenge_id,
-            "type": "correct"
+            "type": "correct",
         }
         return self.request("POST", "/submissions", data=d, token=token)["data"]
 
@@ -114,6 +125,7 @@ class HTTPClient:
     """
         Users 
     """
+
     def get_users(self) -> List[Dict[str, Any]]:
         return self.request("GET", "/users")["data"]
 
@@ -132,6 +144,7 @@ class HTTPClient:
     """
         Flags
     """
+
     def create_flag(self, data) -> Dict[str, Any]:
         d = {
             "content": data["content"],

@@ -47,6 +47,7 @@ class Client:
     """
         Challenges 
     """
+
     def _push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.create_challenge(data)
@@ -64,12 +65,14 @@ class Client:
         return c
 
     def attempt_challenge_with_ctfd_check(
-            self, challenge: Challenge, attempt: str, token: Optional[str] = None
+        self, challenge: Challenge, attempt: str, token: Optional[str] = None
     ) -> bool:
         if challenge.state == "hidden":
             raise HiddenChallengeError("Impossible to attempt hidden challenge.")
         else:
-            result = self.http.attempt_challenge(challenge.id, attempt, token=token)["status"]
+            result = self.http.attempt_challenge(challenge.id, attempt, token=token)[
+                "status"
+            ]
             return result == "correct" or result == "already_solved"
 
     # def attempt_challenge(
@@ -103,6 +106,7 @@ class Client:
     """
         Flags 
     """
+
     def _push_flag(self, flag: Flag) -> Flag:
         data = flag.to_dict()
         response = self.http.create_flag(data)
@@ -128,6 +132,7 @@ class Client:
     """
         Users 
     """
+
     def add_user(self, user: User) -> User:
         data = self.http.create_user(user.to_dict())
         self.users[str(user.id)] = user

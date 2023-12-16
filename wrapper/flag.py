@@ -69,7 +69,7 @@ class Flag:
             "challenge_id": data["challenge_id"],
             "type": data.get("type", template["type"]),
             "content": data.get("content", template["content"]),
-            "data": data.get("data", template["data"])
+            "data": data.get("data", template["data"]),
         }
 
     def check(self, provided: str) -> bool:

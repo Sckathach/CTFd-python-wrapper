@@ -16,7 +16,7 @@ template = {
     "connection_info": " ",  # Is recognized as None when I use ""...
     "tags": [],
     "max_attempts": 0,
-    "solved_by_me": False
+    "solved_by_me": False,
 }
 
 
@@ -59,8 +59,8 @@ class Challenge:
 
     def __str__(self) -> str:
         return (
-                f"Challenge(id={self.id}, name={self.name}, category={self.category}, type={self.type}, "
-                f"state={self.state}, solves={self.solves})"
+            f"Challenge(id={self.id}, name={self.name}, category={self.category}, type={self.type}, "
+            f"state={self.state}, solves={self.solves})"
         )
 
     @classmethod
@@ -104,5 +104,3 @@ class Challenge:
             "max_attempts": data.get("max_attempts", template["max_attempts"]),
             "solved_by_me": data.get("solved_by_me", template["solved_by_me"]),
         }
-
-

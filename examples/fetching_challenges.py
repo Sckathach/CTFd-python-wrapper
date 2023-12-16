@@ -28,4 +28,3 @@ for _, user in client.users.items():
     print(user)
 for _, flag in client.flags.items():
     print(flag)
-
