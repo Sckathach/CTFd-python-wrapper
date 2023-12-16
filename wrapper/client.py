@@ -47,7 +47,6 @@ class Client:
     """
         Challenges 
     """
-
     def _push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.create_challenge(data)
@@ -75,14 +74,15 @@ class Client:
             ]
             return result == "correct" or result == "already_solved"
 
-    # def attempt_challenge(
-    #         self, provided: str, challenge: Challenge, user_id: int, team_id: Optional[int] = None
-    # ) -> bool:
-    #     if challenge.attempt(provided):
-    #         self.http.submission(challenge.id, user_id, team_id)
-    #         return True
-    #     else:
-    #         return False
+    def attempt_challenge(
+            self, provided: str, challenge_id: int, user_id: int, team_id: Optional[int] = None
+    ) -> bool:
+        for _, flag in self.flags.items():
+            if flag.challenge_id == challenge_id or flag.challenge == challenge_id:
+                if flag.check(provided):
+                    self.http.submission(challenge_id, user_id, team_id)
+                    return True
+        return False
 
     def list_challenges(self) -> None:
         for _, chall in self.challenges.items():
@@ -106,7 +106,6 @@ class Client:
     """
         Flags 
     """
-
     def _push_flag(self, flag: Flag) -> Flag:
         data = flag.to_dict()
         response = self.http.create_flag(data)
@@ -118,11 +117,10 @@ class Client:
         self.flags[str(f.id)] = f
         return f
 
-    # def fetch_challenge_flags(self, challenge_id: int) -> None:
-    #     flags = self.http.get_challenge_flags(challenge_id)
-    #     for flag in flags:
-    #         f = Flag.from_dict(flag)
-    #         self.flags[str(flag["id"])] = f
+    def fetch_challenge_flags(self, challenge_id: int) -> None:
+        flags = self.http.get_challenge_flags(challenge_id)
+        for flag in flags:
+            self.flags[str(flag["id"])] = Flag.from_dict(flag)
 
     def fetch_flags(self) -> None:
         flags = self.http.get_flags()
@@ -132,7 +130,6 @@ class Client:
     """
         Users 
     """
-
     def add_user(self, user: User) -> User:
         data = self.http.create_user(user.to_dict())
         self.users[str(user.id)] = user

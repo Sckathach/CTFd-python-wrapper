@@ -10,18 +10,11 @@ URL = "http://127.0.0.1:4000/api/v1"
 
 client = Client()
 # USER_TOKEN = "ctfd_d8bb6f6a5154ad987706c977f0699607e19dae0cc9ed77b75eb011ad3055fc89"
-client.setup(URL, TOKEN, verbose="none")
+client.setup(URL, TOKEN, verbose="debug")
 
-client.fetch_challenges()
-client.fetch_users()
 client.fetch_flags()
 
-for _, user in client.users.items():
-    print(user)
-for _, challenge in client.challenges.items():
-    print(challenge)
-for _, flag in client.flags.items():
-    print(flag)
+print(client.attempt_challenge("flag", 69, 3))
 
 
 # client.delete_challenges()
