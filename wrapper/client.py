@@ -47,6 +47,7 @@ class Client:
     """
         Challenges 
     """
+
     def _push_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.create_challenge(data)
@@ -75,7 +76,11 @@ class Client:
             return result == "correct" or result == "already_solved"
 
     def attempt_challenge(
-            self, provided: str, challenge_id: int, user_id: int, team_id: Optional[int] = None
+        self,
+        provided: str,
+        challenge_id: int,
+        user_id: int,
+        team_id: Optional[int] = None,
     ) -> bool:
         for _, flag in self.flags.items():
             if flag.challenge_id == challenge_id or flag.challenge == challenge_id:
@@ -106,6 +111,7 @@ class Client:
     """
         Flags 
     """
+
     def _push_flag(self, flag: Flag) -> Flag:
         data = flag.to_dict()
         response = self.http.create_flag(data)
@@ -127,9 +133,20 @@ class Client:
         for flag in flags:
             self.flags[str(flag["id"])] = Flag.from_dict(flag)
 
+    def delete_flag(self, flag_id: int) -> None:
+        self.flags.pop(str(flag_id))
+        self.log.debug(f"Flag {flag_id} deleted.")
+
+    def delete_flags(self) -> None:
+        for _, flag in self.flags.items():
+            self.http.delete_flag(flag.id)
+            self.log.debug(f"Flag {flag.id} deleted.")
+        self.flags = {}
+
     """
         Users 
     """
+
     def add_user(self, user: User) -> User:
         data = self.http.create_user(user.to_dict())
         self.users[str(user.id)] = user
@@ -139,3 +156,13 @@ class Client:
         users = self.http.get_users()
         for user in users:
             self.users[str(user["id"])] = User.from_dict(user)
+
+    def delete_user(self, user_id: int) -> None:
+        self.users.pop(str(user_id))
+        self.log.debug(f"User {user_id} deleted.")
+
+    def delete_users(self) -> None:
+        for _, user in self.users.items():
+            self.http.delete_user(user.id)
+            self.log.debug(f"User {user.id} deleted.")
+        self.users = {}

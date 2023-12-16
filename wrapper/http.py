@@ -58,6 +58,7 @@ class HTTPClient:
     """
         Challenges 
     """
+
     def get_challenges(self) -> List[Dict[str, Any]]:
         return self.request("GET", "/challenges?view=admin")["data"]
 
@@ -124,6 +125,7 @@ class HTTPClient:
     """
         Users 
     """
+
     def get_users(self) -> List[Dict[str, Any]]:
         return self.request("GET", "/users")["data"]
 
@@ -139,9 +141,13 @@ class HTTPClient:
         }
         return self.request("POST", "/users", data=d)["data"]
 
+    def delete_user(self, user_id: int = 0) -> Dict[str, Any]:
+        return self.request("DELETE", f"/users/{user_id}")
+
     """
         Flags
     """
+
     def create_flag(self, data) -> Dict[str, Any]:
         d = {
             "content": data["content"],
@@ -153,3 +159,6 @@ class HTTPClient:
 
     def get_flags(self) -> List[Dict[str, Any]]:
         return self.request("GET", "/flags")["data"]
+
+    def delete_flag(self, flag_id: int = 0) -> Dict[str, Any]:
+        return self.request("DELETE", f"/flags/{flag_id}")
