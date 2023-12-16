@@ -16,5 +16,7 @@ client.fetch_users()
 
 # Delete everything
 client.delete_users()
-client.delete_flags()
 client.delete_challenges()
+
+# !! ACHTUNG !! The flags are deleted when the asociated challenge is deleted, so there is no need to do a
+# client.delete_flags(), even if the function exists.

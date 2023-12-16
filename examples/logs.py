@@ -22,8 +22,6 @@ client = Client()
 client.setup(URL, TOKEN, verbose="debug")
 
 client.fetch_challenges()
-
-
 client.list_challenges()
 
 """
