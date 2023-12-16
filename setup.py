@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="wrapper",
-    version="0.1.1",
+    version="0.2.0",
     author="Sckathach",
     author_email="sckathach@hackademint.org",
     description="A simple python wrapper for the CTFd API",
