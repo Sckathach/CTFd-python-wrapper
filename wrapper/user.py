@@ -15,8 +15,10 @@ template = {
 
 
 def generate_random_email(local_length: int = 12, domain_length: int = 7) -> str:
-    local_part = ''.join(random.choices(string.ascii_letters + string.digits, k=local_length))
-    domain_part = ''.join(random.choices(string.ascii_letters, k=domain_length))
+    local_part = "".join(
+        random.choices(string.ascii_letters + string.digits, k=local_length)
+    )
+    domain_part = "".join(random.choices(string.ascii_letters, k=domain_length))
     email = f"{local_part}@{domain_part}.com"
     return email
 
@@ -55,10 +57,10 @@ class User:
 
     @classmethod
     def create(
-            cls,
-            name: str,
-            email: str = generate_random_email(),
-            password: str = template["password"],
+        cls,
+        name: str,
+        email: str = generate_random_email(),
+        password: str = template["password"],
     ) -> "User":
         return User(name=name, email=email, password=password)
 
@@ -78,6 +80,3 @@ class User:
             "hidden": data.get("hidden", template["hidden"]),
             "banned": data.get("banned", template["banned"]),
         }
-
-
-
