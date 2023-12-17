@@ -1,3 +1,6 @@
+import random
+import string
+
 template = {
     "id": -1,
     "name": "bob",
@@ -9,6 +12,13 @@ template = {
     "banned": False,
     "token": "ctfd_6327657374206c6520746f6b656e207375706572207365637265742021",
 }
+
+
+def generate_random_email(local_length: int = 12, domain_length: int = 7) -> str:
+    local_part = ''.join(random.choices(string.ascii_letters + string.digits, k=local_length))
+    domain_part = ''.join(random.choices(string.ascii_letters, k=domain_length))
+    email = f"{local_part}@{domain_part}.com"
+    return email
 
 
 class User:
@@ -44,6 +54,15 @@ class User:
         return self.__dict__
 
     @classmethod
+    def create(
+            cls,
+            name: str,
+            email: str = generate_random_email(),
+            password: str = template["password"],
+    ) -> "User":
+        return User(name=name, email=email, password=password)
+
+    @classmethod
     def from_dict(cls, data):
         return cls(**cls.filter_dict(data))
 
@@ -59,3 +78,6 @@ class User:
             "hidden": data.get("hidden", template["hidden"]),
             "banned": data.get("banned", template["banned"]),
         }
+
+
+
