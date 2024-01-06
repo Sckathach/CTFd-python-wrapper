@@ -80,8 +80,3 @@ class User:
             "hidden": data.get("hidden", template["hidden"]),
             "banned": data.get("banned", template["banned"]),
         }
-
-
-for i in range(100):
-    x = User.create(f"Bob{i}")
-    print(x.email)

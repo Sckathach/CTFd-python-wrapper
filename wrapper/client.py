@@ -87,6 +87,16 @@ class Client:
                     return True
         return False
 
+    def mark_as_solved(
+            self,
+            challenge_id: int,
+            user_id: int,
+            team_id: Optional[int] = None,
+    ) -> None:
+        for _, flag in self.flags.items():
+            if flag.challenge_id == challenge_id or flag.challenge == challenge_id:
+                self.http.submission(challenge_id, user_id, team_id)
+
     def list_challenges(self) -> None:
         for _, chall in self.challenges.items():
             print(chall)

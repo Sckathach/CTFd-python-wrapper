@@ -110,6 +110,7 @@ class HTTPClient:
             team_id: Optional[int] = None,
             token: Optional[str] = None,
     ) -> Dict[str, Any]:
+        print("bonsoir")
         d = {
             "provided": "MARKED AS SOLVED BY ADMIN",
             "user_id": user_id,
