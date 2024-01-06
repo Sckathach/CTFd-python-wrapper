@@ -1,5 +1,4 @@
-from typing import Dict, Any
-from logs import Log
+from .logs import Log
 
 template = {
     "user_id": -1,
@@ -33,8 +32,12 @@ class Token(dict):
         self.value: str = value
         self.log = Log(f"Token{id}")
 
-    def __str__(self, secret_threshold=4):
+    def __str__(self, secret_threshold: int = 4) -> str:
         l1 = len(self.value)
         l2 = l1 // secret_threshold
         token_show = self.value[:l2] + "*" * (l1 - l2)
-        self.log.debug(f"Token {token_show}")
+        return token_show
+
+    @classmethod
+    def create(cls, value: str) -> "Token":
+        return Token(value=value)

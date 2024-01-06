@@ -59,10 +59,10 @@ class User:
     def create(
         cls,
         name: str,
-        email: str = generate_random_email(),
+        email: str = None,
         password: str = template["password"],
     ) -> "User":
-        return User(name=name, email=email, password=password)
+        return User(name=name, email=email if email else generate_random_email(), password=password)
 
     @classmethod
     def from_dict(cls, data):
@@ -80,3 +80,8 @@ class User:
             "hidden": data.get("hidden", template["hidden"]),
             "banned": data.get("banned", template["banned"]),
         }
+
+
+for i in range(100):
+    x = User.create(f"Bob{i}")
+    print(x.email)

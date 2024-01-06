@@ -6,6 +6,7 @@ from .http import HTTPClient
 from .logs import Log
 from .user import User
 from .flag import Flag
+from .token import Token
 
 
 class Client:
@@ -17,9 +18,9 @@ class Client:
         self.log: Log = Log("Client")
 
     def setup(
-        self, url: str, token: str, verbose: str = "minimal", secret_threshold: int = 4
+        self, url: str, token: str, verbose: str = "minimal"
     ) -> None:
-        self.http.token = token
+        self.http.token = Token.create(token)
         self.http.url = url
 
         # Verbose
@@ -37,11 +38,8 @@ class Client:
             self.http.log.level = 3
 
         # Logs
-        l1 = len(self.http.token)
-        l2 = l1 // secret_threshold
-        token_show = self.http.token[:l2] + "*" * (l1 - l2)
         self.log.debug(
-            f"self.http.token = {token_show}, self.http.url = {self.http.url}"
+            f"self.http.token = {self.http.token}, self.http.url = {self.http.url}"
         )
 
     """
