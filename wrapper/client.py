@@ -1,4 +1,4 @@
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any, Tuple
 
 from .errors import HiddenChallengeError
 from .challenge import Challenge
@@ -186,3 +186,6 @@ class Client:
         for solve in solves:
             points += solve["challenge"]["value"]
         return points
+
+    def fetch_user_solves(self, user_id: int) -> List[Tuple[int, int, str, str]]:
+        solves = self.http.get_user_solves(user_id)
