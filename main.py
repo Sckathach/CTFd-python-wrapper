@@ -21,19 +21,17 @@ client.fetch_flags()
 client.delete_users()
 client.delete_challenges()
 
-challenge = Challenge.create("Bof4", "PWN")
+user = User.create("Bob")
+user = client.add_user(user)
+challenge = Challenge.create("Bof3", "PWN")
 challenge = client.add_challenge(challenge)
-assert challenge.id != -1
-challenge.description = "*Hello there !*"
-challenge.initial = 666
-challenge = client.update_challenge(challenge)
-assert challenge.description == "*Hello there !*"
-print(challenge)
-client.list_challenges()
-client.fetch_challenges()
-client.list_challenges()
+flag = Flag.create("flag", challenge.id)
+flag = client.add_flag(flag)
 
-#
+client.attempt_challenge("fdjkslfmj", challenge.id, user.id)
+client.mark_as_solved(challenge.id, user.id)
+
+
 # def pick_random_gaussian(length: int, mean: int, std_dev: int) -> int:
 #     """
 #     Picks a random item from the list with a Gaussian distribution.
