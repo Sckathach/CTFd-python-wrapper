@@ -169,3 +169,10 @@ class Client:
             self.http.delete_user(user.id)
             self.log.debug(f"User {user.id} deleted.")
         self.users = {}
+
+    def fetch_user_points(self, user_id: int) -> int:
+        solves = self.http.get_user_solves(user_id)
+        points = 0
+        for solve in solves:
+            points += solve["challenge"]["value"]
+        return points
