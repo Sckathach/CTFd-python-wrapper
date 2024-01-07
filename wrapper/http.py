@@ -14,12 +14,12 @@ class HTTPClient:
         self.log = Log("HTTPClient")
 
     def request(
-            self,
-            request_type: str,
-            path: str,
-            data: Dict[str, Any] = None,
-            token: Optional[str] = None,
-            request_data: Optional[bool] = True
+        self,
+        request_type: str,
+        path: str,
+        data: Dict[str, Any] = None,
+        token: Optional[str] = None,
+        request_data: Optional[bool] = True,
     ) -> Dict[str, Any]:
         headers = {
             "Authorization": f"Bearer {token if token else self.token.value}",
@@ -95,17 +95,17 @@ class HTTPClient:
         return self.request("POST", "/challenges", data=d)["data"]
 
     def attempt_challenge(
-            self, challenge_id: int, flag: str, token: Optional[str] = None
+        self, challenge_id: int, flag: str, token: Optional[str] = None
     ) -> Dict[str, Any]:
         d = {"challenge_id": challenge_id, "submission": flag}
         return self.request("POST", "/challenges/attempt", data=d, token=token)["data"]
 
     def submission(
-            self,
-            challenge_id: int,
-            user_id: int,
-            team_id: Optional[int] = None,
-            token: Optional[str] = None,
+        self,
+        challenge_id: int,
+        user_id: int,
+        team_id: Optional[int] = None,
+        token: Optional[str] = None,
     ) -> Dict[str, Any]:
         d = {
             "provided": "MARKED AS SOLVED BY ADMIN",

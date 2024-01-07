@@ -17,9 +17,7 @@ class Client:
         self.flags: Optional[Dict[str, Flag]] = {}
         self.log: Log = Log("Client")
 
-    def setup(
-        self, url: str, token: str, verbose: str = "minimal"
-    ) -> None:
+    def setup(self, url: str, token: str, verbose: str = "minimal") -> None:
         self.http.token = Token.create(token)
         self.http.url = url
 
@@ -45,6 +43,7 @@ class Client:
     """
         Challenges 
     """
+
     def update_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.update_challenge(data)
@@ -85,10 +84,10 @@ class Client:
         return False
 
     def mark_as_solved(
-            self,
-            challenge_id: int,
-            user_id: int,
-            team_id: Optional[int] = None,
+        self,
+        challenge_id: int,
+        user_id: int,
+        team_id: Optional[int] = None,
     ) -> None:
         for _, flag in self.flags.items():
             if flag.challenge_id == challenge_id or flag.challenge == challenge_id:
