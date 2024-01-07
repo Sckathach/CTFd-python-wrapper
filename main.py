@@ -1,4 +1,7 @@
+from wrapper.challenge import Challenge
 from wrapper.client import Client
+from wrapper.user import User
+from wrapper.flag import Flag
 from dotenv import load_dotenv
 from time import sleep
 from random import randint
@@ -17,6 +20,14 @@ client.fetch_challenges()
 client.fetch_flags()
 client.delete_users()
 client.delete_challenges()
+
+user = User.create("bob")
+user = client.add_user(user)
+challenge = Challenge.create("Bof", "PWN")
+challenge = client.add_challenge(challenge)
+flag = Flag.create("test", challenge.id)
+flag = client.add_flag(flag)
+client.mark_as_solved(challenge.id, user.id)
 #
 # def pick_random_gaussian(length: int, mean: int, std_dev: int) -> int:
 #     """
