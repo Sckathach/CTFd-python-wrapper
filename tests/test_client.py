@@ -1,6 +1,7 @@
 from wrapper.client import Client
 from wrapper.challenge import Challenge
 from wrapper.user import User
+from wrapper.flag import Flag
 from dotenv import load_dotenv
 import os
 
@@ -30,6 +31,24 @@ class TestClient:
         user = User.create("Bob 1er")
         user = self.client.add_user(user)
         assert user.id != -1
+
+    def test_create_flag(self):
+        challenge = Challenge.create("Bof", "PWN")
+        challenge = self.client.add_challenge(challenge)
+        flag = Flag.create("password", challenge.id)
+        flag = self.client.add_flag(flag)
+        assert challenge.id != -1
+        assert flag.id != -1
+
+    def test_flag_check(self):
+        flag = Flag.create("flag", 0)
+        assert flag.check("flag")
+        assert not flag.check("wrong_flag")
+
+    def test_flag_case_insensitive(self):
+        flag = Flag(challenge_id=1, data="case_insensitive", content="fLaG")
+        assert flag.check("flag")
+        assert flag.check("FLAG")
 
     def teardown_method(self, method):
         self.client.delete_users()
