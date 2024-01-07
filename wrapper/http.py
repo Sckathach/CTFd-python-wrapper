@@ -1,5 +1,4 @@
 from typing import Optional, Dict, List, Any
-from .flag import Flag
 from .token import Token
 import requests as rq
 import json
@@ -48,8 +47,6 @@ class HTTPClient:
                     self.log.debug(f"{json.dumps(rj, indent=4)}")
                     if request_data and "data" not in rj.keys():
                         raise RequestError("No data in response")
-                    elif "data" in rj.keys():
-                        return rj["data"]
                     else:
                         return rj
                 else:
@@ -71,14 +68,14 @@ class HTTPClient:
         Challenges 
     """
 
-    def get_challenges(self) -> Dict[str, Any]:
-        return self.request("GET", "/challenges?view=admin")
+    def get_challenges(self) -> List[Dict[str, Any]]:
+        return self.request("GET", "/challenges?view=admin")["data"]
 
     def get_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
-        return self.request("GET", f"/challenges/{challenge_id}")
+        return self.request("GET", f"/challenges/{challenge_id}")["data"]
 
-    def get_challenge_flags(self, challenge_id: int = 0) -> Dict[str, Any]:
-        return self.request("GET", f"/challenges/{challenge_id}/flags")
+    def get_challenge_flags(self, challenge_id: int = 0) -> List[Dict[str, Any]]:
+        return self.request("GET", f"/challenges/{challenge_id}/flags")["data"]
 
     def delete_challenge(self, challenge_id: int = 0) -> Dict[str, Any]:
         return self.request("DELETE", f"/challenges/{challenge_id}", request_data=False)
@@ -95,13 +92,13 @@ class HTTPClient:
             "state": data["state"],
             "type": data["type"],
         }
-        return self.request("POST", "/challenges", data=d)
+        return self.request("POST", "/challenges", data=d)["data"]
 
     def attempt_challenge(
             self, challenge_id: int, flag: str, token: Optional[str] = None
     ) -> Dict[str, Any]:
         d = {"challenge_id": challenge_id, "submission": flag}
-        return self.request("POST", "/challenges/attempt", data=d, token=token)
+        return self.request("POST", "/challenges/attempt", data=d, token=token)["data"]
 
     def submission(
             self,
@@ -110,7 +107,6 @@ class HTTPClient:
             team_id: Optional[int] = None,
             token: Optional[str] = None,
     ) -> Dict[str, Any]:
-        print("bonsoir")
         d = {
             "provided": "MARKED AS SOLVED BY ADMIN",
             "user_id": user_id,
@@ -118,7 +114,7 @@ class HTTPClient:
             "challenge_id": challenge_id,
             "type": "correct",
         }
-        return self.request("POST", "/submissions", data=d, token=token)
+        return self.request("POST", "/submissions", data=d, token=token)["data"]
 
     def update_challenge(self, data) -> Dict[str, Any]:
         d = {
@@ -133,14 +129,14 @@ class HTTPClient:
             "max_attempts": data["max_attempts"],
             "state": data["state"],
         }
-        return self.request("PATCH", f'/challenges/{data["id"]}', data=d)
+        return self.request("PATCH", f'/challenges/{data["id"]}', data=d)["data"]
 
     """
         Users 
     """
 
-    def get_users(self) -> Dict[str, Any]:
-        return self.request("GET", "/users")
+    def get_users(self) -> List[Dict[str, Any]]:
+        return self.request("GET", "/users")["data"]
 
     def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
@@ -152,7 +148,7 @@ class HTTPClient:
             "hidden": data["hidden"],
             "banned": data["banned"],
         }
-        return self.request("POST", "/users", data=d)
+        return self.request("POST", "/users", data=d)["data"]
 
     def delete_user(self, user_id: int = 0) -> Dict[str, Any]:
         return self.request("DELETE", f"/users/{user_id}", request_data=False)
@@ -168,10 +164,10 @@ class HTTPClient:
             "type": data["type"],
             "challenge": data["challenge"],
         }
-        return self.request("POST", "/flags", data=d)
+        return self.request("POST", "/flags", data=d)["data"]
 
-    def get_flags(self) -> Dict[str, Any]:
-        return self.request("GET", "/flags")
+    def get_flags(self) -> List[Dict[str, Any]]:
+        return self.request("GET", "/flags")["data"]
 
     def delete_flag(self, flag_id: int = 0) -> Dict[str, Any]:
         return self.request("DELETE", f"/flags/{flag_id}", request_data=False)
