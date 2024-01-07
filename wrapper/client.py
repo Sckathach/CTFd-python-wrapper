@@ -186,6 +186,3 @@ class Client:
         for solve in solves:
             points += solve["challenge"]["value"]
         return points
-
-    def fetch_user_solves(self, user_id: int) -> List[Tuple[int, int, str, str]]:
-        solves = self.http.get_user_solves(user_id)
