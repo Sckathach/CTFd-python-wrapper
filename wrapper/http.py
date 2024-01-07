@@ -138,6 +138,9 @@ class HTTPClient:
     def get_users(self) -> List[Dict[str, Any]]:
         return self.request("GET", "/users")["data"]
 
+    def get_user_solves(self, user_id: int = 0) -> List[Dict[str, Any]]:
+        return self.request("GET", f"/users/{user_id}/solves")["data"]
+
     def create_user(self, data: Dict[str, Any]) -> Dict[str, Any]:
         d = {
             "name": data["name"],
