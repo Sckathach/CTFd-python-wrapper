@@ -59,8 +59,8 @@ class Challenge:
 
     def __str__(self) -> str:
         return (
-            f"Challenge(id={self.id}, name={self.name}, category={self.category}, type={self.type}, "
-            f"state={self.state}, solves={self.solves})"
+            f"Challenge(id={self.id}, name={self.name}, category={self.category}, initial={self.initial} "
+            f"value={self.value}, description={self.description}, state={self.state}, solves={self.solves})"
         )
 
     @classmethod
