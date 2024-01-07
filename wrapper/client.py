@@ -45,22 +45,16 @@ class Client:
     """
         Challenges 
     """
-
-    def _push_challenge(self, challenge: Challenge) -> Challenge:
-        data = challenge.to_dict()
-        response = self.http.create_challenge(data)
-        challenge.id = response["id"]
-        return challenge
-
     def update_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.update_challenge(data)
         return Challenge.from_dict(response)
 
     def add_challenge(self, challenge: Challenge) -> Challenge:
-        c = self._push_challenge(challenge)
-        self.challenges[str(c.id)] = c
-        return c
+        response = self.http.create_challenge(challenge.to_dict())
+        challenge.id = response["id"]
+        self.challenges[str(challenge.id)] = challenge
+        return challenge
 
     def attempt_challenge_with_ctfd_check(
         self, challenge: Challenge, attempt: str, token: Optional[str] = None
@@ -98,22 +92,22 @@ class Client:
                 self.http.submission(challenge_id, user_id, team_id)
 
     def list_challenges(self) -> None:
-        for _, chall in self.challenges.items():
-            print(chall)
+        for _, challenge in self.challenges.items():
+            print(challenge)
 
     def fetch_challenges(self) -> None:
         challenges = self.http.get_challenges()
-        for chall in challenges:
-            self.challenges[str(chall["id"])] = Challenge.from_dict(chall)
+        for challenge in challenges:
+            self.challenges[str(challenge["id"])] = Challenge.from_dict(challenge)
 
     def delete_challenge(self, challenge_id: int) -> None:
         self.challenges.pop(str(challenge_id))
         self.log.debug(f"Challenge {challenge_id} deleted.")
 
     def delete_challenges(self) -> None:
-        for _, chall in self.challenges.items():
-            self.http.delete_challenge(chall.id)
-            self.log.debug(f"Challenge {chall.id} deleted.")
+        for _, challenge in self.challenges.items():
+            self.http.delete_challenge(challenge.id)
+            self.log.debug(f"Challenge {challenge.id} deleted.")
         self.challenges = {}
 
     """
@@ -156,9 +150,10 @@ class Client:
     """
 
     def add_user(self, user: User) -> User:
-        data = self.http.create_user(user.to_dict())
+        response = self.http.create_user(user.to_dict())
+        user.id = response["id"]
         self.users[str(user.id)] = user
-        return User.from_dict(data)
+        return user
 
     def fetch_users(self) -> None:
         users = self.http.get_users()
