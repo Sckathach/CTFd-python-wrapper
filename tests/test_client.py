@@ -35,9 +35,9 @@ class TestClient:
     def test_create_flag(self):
         challenge = Challenge.create("Bof", "PWN")
         challenge = self.client.add_challenge(challenge)
-        flag = Flag.create("password", challenge.id)
-        flag = self.client.add_flag(flag)
         assert challenge.id != -1
+        flag = Flag.create("flag", challenge.id)
+        flag = self.client.add_flag(flag)
         assert flag.id != -1
 
     def test_flag_check(self):
@@ -49,6 +49,34 @@ class TestClient:
         flag = Flag(challenge_id=1, data="case_insensitive", content="fLaG")
         assert flag.check("flag")
         assert flag.check("FLAG")
+
+    def test_flag_ctfd(self):
+        user = User.create("Bob 2e")
+        user = self.client.add_user(user)
+        assert user.id != -1
+        challenge = Challenge.create("Bof2", "PWN")
+        challenge = self.client.add_challenge(challenge)
+        assert challenge.id != -1
+        flag = Flag.create("flag", challenge.id)
+        flag = self.client.add_flag(flag)
+        assert flag.id != -1
+
+        assert not self.client.attempt_challenge("wrong_flag", challenge.id, user.id)
+        assert self.client.attempt_challenge("flag", challenge.id, user.id)
+
+    def test_marked_as_solved(self):
+        user = User.create("Bob 3e")
+        user = self.client.add_user(user)
+        assert user.id != -1
+        challenge = Challenge.create("Bof3", "PWN")
+        challenge = self.client.add_challenge(challenge)
+        assert challenge.id != -1
+        # ! There need to be at least one flag to mark the challenge as solved !
+        flag = Flag.create("flag", challenge.id)
+        flag = self.client.add_flag(flag)
+        assert flag.id != -1
+
+        self.client.mark_as_solved(challenge.id, user.id)
 
     def teardown_method(self, method):
         self.client.delete_users()
