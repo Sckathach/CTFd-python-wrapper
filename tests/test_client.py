@@ -63,6 +63,7 @@ class TestClient:
 
         assert not self.client.attempt_challenge("wrong_flag", challenge.id, user.id)
         assert self.client.attempt_challenge("flag", challenge.id, user.id)
+        assert self.client.fetch_user_points(user.id) == challenge.value
 
     def test_marked_as_solved(self):
         user = User.create("Bob 3e")
@@ -77,6 +78,18 @@ class TestClient:
         assert flag.id != -1
 
         self.client.mark_as_solved(challenge.id, user.id)
+        assert self.client.fetch_user_points(user.id) == challenge.value
+
+    def test_update_challenge(self):
+        challenge = Challenge.create("Bof4", "PWN")
+        challenge = self.client.add_challenge(challenge)
+        assert challenge.id != -1
+        challenge.description = "*Hello there !*"
+        challenge = self.client.update_challenge(challenge)
+        assert challenge.description == "*Hello there !*"
+
+        self.client.fetch_challenges()
+        assert self.client.challenges[str(challenge.id)].description == "*Hello there !*"
 
     def teardown_method(self, method):
         self.client.delete_users()

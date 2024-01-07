@@ -48,7 +48,10 @@ class Client:
     def update_challenge(self, challenge: Challenge) -> Challenge:
         data = challenge.to_dict()
         response = self.http.update_challenge(data)
-        return Challenge.from_dict(response)
+        print(response)
+        challenge = Challenge.from_dict(response)
+        self.challenges[str(challenge.id)] = challenge
+        return challenge
 
     def add_challenge(self, challenge: Challenge) -> Challenge:
         response = self.http.create_challenge(challenge.to_dict())
@@ -98,7 +101,15 @@ class Client:
     def fetch_challenges(self) -> None:
         challenges = self.http.get_challenges()
         for challenge in challenges:
-            self.challenges[str(challenge["id"])] = Challenge.from_dict(challenge)
+            if str(challenge["id"]) in self.challenges.keys():
+                # TODO: make sure it does not create issues
+                # get_challenges do not fetch every field, so it is overwritten by the template
+                # It might be mandatory to fetch challenges one by one, even those not already in the client
+                # they might have been created with the CTFd GUI
+                c = Challenge.from_dict(self.http.get_challenge(challenge["id"]))
+            else:
+                c = Challenge.from_dict(challenge)
+            self.challenges[str(challenge["id"])] = c
 
     def delete_challenge(self, challenge_id: int) -> None:
         self.challenges.pop(str(challenge_id))

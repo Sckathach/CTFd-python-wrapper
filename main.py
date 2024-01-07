@@ -21,15 +21,18 @@ client.fetch_flags()
 client.delete_users()
 client.delete_challenges()
 
-user = User.create("bob")
-user = client.add_user(user)
-for i in range(100):
-    challenge = Challenge.create(f"Bof{i}", "PWN")
-    challenge = client.add_challenge(challenge)
-    flag = Flag.create("test", challenge.id)
-    flag = client.add_flag(flag)
-    client.mark_as_solved(challenge.id, user.id)
-print(client.fetch_user_points(user.id))
+challenge = Challenge.create("Bof4", "PWN")
+challenge = client.add_challenge(challenge)
+assert challenge.id != -1
+challenge.description = "*Hello there !*"
+challenge.initial = 666
+challenge = client.update_challenge(challenge)
+assert challenge.description == "*Hello there !*"
+print(challenge)
+client.list_challenges()
+client.fetch_challenges()
+client.list_challenges()
+
 #
 # def pick_random_gaussian(length: int, mean: int, std_dev: int) -> int:
 #     """
