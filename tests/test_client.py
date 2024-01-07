@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-TOKEN = os.getenv('TOKEN')
+TOKEN = os.getenv("TOKEN")
 URL = "http://127.0.0.1:8000/api/v1"
 
 
@@ -89,7 +89,9 @@ class TestClient:
         assert challenge.description == "*Hello there !*"
 
         self.client.fetch_challenges()
-        assert self.client.challenges[str(challenge.id)].description == "*Hello there !*"
+        assert (
+            self.client.challenges[str(challenge.id)].description == "*Hello there !*"
+        )
 
     def teardown_method(self, method):
         self.client.delete_users()

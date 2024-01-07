@@ -62,7 +62,11 @@ class User:
         email: str = None,
         password: str = template["password"],
     ) -> "User":
-        return User(name=name, email=email if email else generate_random_email(), password=password)
+        return User(
+            name=name,
+            email=email if email else generate_random_email(),
+            password=password,
+        )
 
     @classmethod
     def from_dict(cls, data):

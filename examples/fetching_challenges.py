@@ -32,14 +32,14 @@ client.fetch_flags()
 
 print("\n\n\n")
 print("Hacking users' passwords...")
-sleep(randint(200, 1000)/100)
+sleep(randint(200, 1000) / 100)
 print("Sheeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesh !")
 for _, user in client.users.items():
     print(user.name + ":" + user.password)
 
 print("\n\n\n")
 print("Hacking administrator...")
-sleep(randint(200, 1000)/100)
+sleep(randint(200, 1000) / 100)
 print("Seeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesh !")
 for _, flag in client.flags.items():
     print(client.challenges[str(flag.challenge_id)].name + ":" + flag.content)
