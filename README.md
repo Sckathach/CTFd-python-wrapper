@@ -1,5 +1,9 @@
 # Python Wrapper for CTFd's API
 
+&rarr; *En attendant un `README.md` correct, des exemples illustrant les principales fonctionnalités sont disponibles 
+dans [examples](./examples)*.
+
+
 ## Installation
 Mise en place de l'environnement de travail :
 ```shell

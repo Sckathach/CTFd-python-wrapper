@@ -54,10 +54,10 @@ def pick_random_gaussian(length: int, mean: int, std_dev: int) -> int:
     return index
 
 #
-# while 1:
-#     print("test?")
-#     chall = randint(0, 100)
-#     user = pick_random_gaussian(100, 50, 10)
-#     print(user, chall)
-#     client.mark_as_solved(chall, user)
-#     sleep(1)
+while 1:
+    print("test?")
+    chall = randint(0, 100)
+    user = pick_random_gaussian(100, 50, 10)
+    print(user, chall)
+    client.mark_as_solved(chall, user)
+    sleep(1)
