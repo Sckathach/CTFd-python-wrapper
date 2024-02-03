@@ -1,28 +1,35 @@
 # Python Wrapper for CTFd's API
 
-&rarr; *En attendant un `README.md` correct, des exemples illustrant les principales fonctionnalités sont disponibles 
-dans [examples](./examples)*.
-
-
 ## Installation
 Mise en place de l'environnement de travail :
 ```shell
 python3 -m venv venv 
-api venv/bin/activate
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Configuration
-### Token
-Le token CTFd est à mettre dans le fichier `.env` situé à la racine du projet : 
-``` 
-TOKEN=votre-magnifique-token
-```
-### Verbose
-Dans la configuration : `.config`, mettre la valeur à `Nothing`, `Simple` ou `Full`:
-``` 
-VERBOSE=Full
-```
+## Initialisation du CTFd
+Pour faire des tests, il est possible d'installer une version dockerisée du CTFd : 
+- Télécharger le projet depuis GitHub : https://github.com/CTFd/CTFd
+- Lancer le docker : `docker run -p 8000:8000 -it ctfd/ctfd`
+
+Durant la configuration de départ, selectionner `User Mode` dans l'onglet `Mode`. Une fois le CTFd initialisé, il faut, 
+avec un compte administrateur (compte créé de base), dans `Settings`, puis `Access Tokens`. Il faut ensuite générer un
+token et le mettre dans les variables d'environnement : 
+- Créer un fichier `.env` à la racine du projet
+- Ajouter la ligne : `TOKEN=ctfd-votre-token`
+
+## Utilisation
+Une fois l'installation faite, il est possible de la tester en lançant la commande `pytest`. Si aucun test ne passe, 
+peut-être que le wrapper n'arrive pas à se connecter à l'instance de CTFd, vérifiez alors l'URL et le TOKEN.
+
+Des [exemples](./examples) sont disponibles dans le code. Des [tests](./tests) sont aussi disponibles. 
+
+## Debug
+Les requêtes peuvent être essayées sans le wrapper, la documentation est disponible sur 
+[docs.ctfd.io](https://docs.ctfd.io/docs/api/redoc/).
+
+La structure des objets est celle du CTFd, les requêtes sont toutes lancées depuis `client.py`.
 
 ## Installation de Black 
 ### En utilisant le Makefile de Sckathach
