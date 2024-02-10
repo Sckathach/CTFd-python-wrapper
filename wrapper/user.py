@@ -15,6 +15,13 @@ template = {
 
 
 def generate_random_email(local_length: int = 12, domain_length: int = 7) -> str:
+    """
+    Generate a random email as two emails can not be equal.
+
+    :param local_length: (optional)
+    :param domain_length: (optional)
+    :return:
+    """
     local_part = "".join(
         random.choices(string.ascii_letters + string.digits, k=local_length)
     )
