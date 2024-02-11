@@ -12,7 +12,7 @@ import os
 project = 'CTFd Wrapper'
 copyright = '2024, Sckathach'
 author = 'Sckathach'
-release = 'v1.0'
+release = 'v0.3.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

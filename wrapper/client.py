@@ -263,19 +263,6 @@ class Client:
         return points
 
     def get_user_solves(self, user_id: int) -> Dict[str, List[str]]:
-        """
-        Return a dictionary:
-        {
-            "<challenge_id>": {
-                "provided": "<provided>",
-                "date": "<date>"
-            },
-            ...
-        }
-
-        :param user_id:
-        :return:
-        """
         d = {}
         for solve in self.http.get_user_solves(user_id):
             d[solve["challenge_id"]] = [solve["provided"], solve["date"]]
