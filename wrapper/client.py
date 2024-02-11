@@ -255,9 +255,29 @@ class Client:
             self.log.debug(f"User {user.id} deleted.")
         self.users = {}
 
-    def fetch_user_points(self, user_id: int) -> int:
+    def get_user_points(self, user_id: int) -> int:
         solves = self.http.get_user_solves(user_id)
         points = 0
         for solve in solves:
             points += solve["challenge"]["value"]
         return points
+
+    def get_user_solves(self, user_id: int) -> Dict[str, List[str]]:
+        """
+        Return a dictionary:
+        {
+            "<challenge_id>": {
+                "provided": "<provided>",
+                "date": "<date>"
+            },
+            ...
+        }
+
+        :param user_id:
+        :return:
+        """
+        d = {}
+        for solve in self.http.get_user_solves(user_id):
+            d[solve["challenge_id"]] = [solve["provided"], solve["date"]]
+        return d
+

@@ -63,7 +63,7 @@ class TestClient:
 
         assert not self.client.attempt_challenge("wrong_flag", challenge.id, user.id)
         assert self.client.attempt_challenge("flag", challenge.id, user.id)
-        assert self.client.fetch_user_points(user.id) == challenge.value
+        assert self.client.get_user_points(user.id) == challenge.value
 
     def test_marked_as_solved(self):
         user = User.create("Bob 3e")
@@ -78,7 +78,7 @@ class TestClient:
         assert flag.id != -1
 
         self.client.mark_as_solved(challenge.id, user.id)
-        assert self.client.fetch_user_points(user.id) == challenge.value
+        assert self.client.get_user_points(user.id) == challenge.value
 
     def test_update_challenge(self):
         challenge = Challenge.create("Bof4", "PWN")

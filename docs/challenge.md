@@ -1,4 +1,4 @@
-# wrapper.challenge
+# Challenge
 
 ```{eval-rst}
 .. automodule:: wrapper.challenge

@@ -1,4 +1,4 @@
-## wrapper.client module
+# Client
 
 ```{eval-rst}
 .. automodule:: wrapper.client

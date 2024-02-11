@@ -1,4 +1,4 @@
-# wrapper.http 
+# HTTPClient
 
 ```{eval-rst}
 .. automodule:: wrapper.http

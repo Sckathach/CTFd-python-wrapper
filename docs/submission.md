@@ -1,4 +1,4 @@
-## wrapper.submission 
+# Submission
 
 ```{eval-rst}
 .. automodule:: wrapper.submission

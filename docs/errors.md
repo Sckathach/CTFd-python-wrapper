@@ -1,4 +1,4 @@
-# wrapper.errors 
+# Errors
 
 ```{eval-rst}
 .. automodule:: wrapper.errors

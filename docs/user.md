@@ -1,4 +1,4 @@
-# wrapper.user 
+# User
 
 ```{eval-rst}
 .. automodule:: wrapper.user

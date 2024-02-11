@@ -1,4 +1,4 @@
-# wrapper.logs module
+# Logs
 
 ```{eval-rst}
 .. automodule:: wrapper.logs

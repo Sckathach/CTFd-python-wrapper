@@ -64,6 +64,34 @@ class HTTPClient:
             self.log.error("FATAL: EXITING...")
             exit(1)
 
+    def request_with_error(
+            self,
+            request_type: str,
+            path: str,
+            data: Dict[str, Any] = None,
+            token: Optional[str] = None
+    ) -> Dict[str, Any]:
+        headers = {
+            "Authorization": f"Bearer {token if token else self.token.value}",
+            "Content-Type": "application/json"
+        }
+        if request_type == "POST":
+            r = rq.post(self.url + path, json=data, headers=headers)
+        elif request_type == "GET":
+            r = rq.get(self.url + path, headers=headers)
+        elif request_type == "PATCH":
+            r = rq.patch(self.url + path, json=data, headers=headers)
+        else:
+            r = rq.delete(self.url + path, headers=headers)
+
+        self.log.debug(f"{request_type} {path} {r.status_code}")
+        if r.status_code == 200:
+            rj = r.json()
+            if "success" in rj.keys() and rj["success"]:
+                return rj
+            self.log.info("<SILENCED ERROR> " + rj)
+        self.log.info("<SILENCED ERROR> " + r.content.decode())
+
     """
         Challenges 
     """
@@ -114,6 +142,10 @@ class HTTPClient:
             "challenge_id": challenge_id,
             "type": "correct",
         }
+        solves = self.get_user_solves(user_id)
+        for i in range(len(solves)):
+            if solves[i]["challenge_id"] == challenge_id:
+                return solves[i]
         return self.request("POST", "/submissions", data=d, token=token)["data"]
 
     def update_challenge(self, data) -> Dict[str, Any]:
@@ -136,7 +168,14 @@ class HTTPClient:
     """
 
     def get_users(self) -> List[Dict[str, Any]]:
-        return self.request("GET", "/users")["data"]
+        i = 1
+        l = []
+        while True:
+            try:
+                l += self.request_with_error("GET", f"/users?page={i}")["data"]
+                i += 1
+            except Exception:
+                return l
 
     def get_user_solves(self, user_id: int = 0) -> List[Dict[str, Any]]:
         return self.request("GET", f"/users/{user_id}/solves")["data"]

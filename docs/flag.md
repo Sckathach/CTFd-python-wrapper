@@ -1,4 +1,4 @@
-# wrapper.flag 
+# Flag
 
 ```{eval-rst}
 .. automodule:: wrapper.flag

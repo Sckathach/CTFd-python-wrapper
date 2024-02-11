@@ -1,4 +1,4 @@
-# wrapper.token 
+# Token
 
 ```{eval-rst}
 .. automodule:: wrapper.token
