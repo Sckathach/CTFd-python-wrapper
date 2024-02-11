@@ -17,5 +17,7 @@ install_black:
 	echo -e '#!/bin/bash\nmake pre-commit' > test
 
 release:
-	python setup.py sdist
-	cp dist/wrapper* ../CTFdSimulation
+	python -m build
+	# git tag -a v0.3.1 -m "Release version 0.3.1"
+	# git push --tags
+	# cp dist/wrapper* ../CTFdSimulation
