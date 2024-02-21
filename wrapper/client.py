@@ -267,4 +267,3 @@ class Client:
         for solve in self.http.get_user_solves(user_id):
             d[solve["challenge_id"]] = [solve["provided"], solve["date"]]
         return d
-

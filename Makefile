@@ -1,3 +1,5 @@
+VERSION=0.0.0
+
 format:
 	black .
 
@@ -18,6 +20,9 @@ install_black:
 
 release:
 	python -m build
-	# git tag -a v0.3.1 -m "Release version 0.3.1"
-	# git push --tags
+	 git tag -a v0.3.1 -m "Release version 0.3.1"
+	 git push --tags
 	# cp dist/wrapper* ../CTFdSimulation
+
+test:
+	echo "git tag -a v$(VERSION) 'Release version $(VERSION)'"
